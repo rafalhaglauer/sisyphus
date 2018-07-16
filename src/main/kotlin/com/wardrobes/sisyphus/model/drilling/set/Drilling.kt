@@ -1,17 +1,28 @@
 package com.wardrobes.sisyphus.model.drilling.set
 
+import com.wardrobes.sisyphus.model.wardrobe.Drilling
+import com.wardrobes.sisyphus.model.wardrobe.Element
+
 interface RelativeDrillingSet {
 
-    fun getRelativeDrillingGroup() : List<RelativeDrilling>
+    fun getDrillingGroup(): List<RelativeDrilling>
 }
 
 class RelativeDrilling(val xPosition: RelativePosition = RelativePosition(), val yPosition: RelativePosition = RelativePosition(), val depth: Float, val diameter: Float, condition: (Int) -> Boolean = { true }) {
 
     constructor(xPosition: RelativePosition = RelativePosition(), yPosition: RelativePosition = RelativePosition(), drillingType: DrillingType, condition: (Int) -> Boolean = { true }) : this(xPosition, yPosition, drillingType.depth, drillingType.diameter, condition)
 
+    fun toDrilling(element: Element): Drilling = with(element) {
+        Drilling(
+                xPosition = xPosition.toAbsolute(width),
+                yPosition = yPosition.toAbsolute(length),
+                diameter = diameter,
+                depth = depth)
+    }
+
 }
 
-class RelativePosition(private val offset: Float = 0f, private val percentageOffset: Float = 0f, private val referenceType: ReferenceType = ReferenceType.BEGIN) {
+class RelativePosition(var offset: Float = 0f, val percentageOffset: Float = 0f, val referenceType: ReferenceType = ReferenceType.BEGIN) {
 
     fun toAbsolute(size: Float): Float =
             when(referenceType) {
@@ -30,19 +41,9 @@ enum class ReferenceType {
     BEGIN, END
 }
 
-/*
-*
-* companion object {
-
-                fun dowel(xPosition: Float, yPosition: Float) = Drilling(xPosition = xPosition, yPosition = yPosition, depth = 10F, diameter = 8F)
-
-                fun stealDowel(xPosition: Float, yPosition: Float) = Drilling(xPosition = xPosition, yPosition = yPosition, depth = 8F, diameter = 5F)
-
-                fun stealDowelConnector(xPosition: Float, yPosition: Float) = Drilling(xPosition = xPosition, yPosition = yPosition, depth = 8F, diameter = 10F)
-
-                fun support(xPosition: Float, yPosition: Float) = Drilling(xPosition = xPosition, yPosition = yPosition, depth = 8F, diameter = 5F)
-
-                fun confirmatScrew(xPosition: Float, yPosition: Float, elementHeight: Float = 18F) = Drilling(xPosition = xPosition, yPosition = yPosition, depth = elementHeight.toFloat(), diameter = 5F)
+fun List<RelativeDrilling>.transform(xOffset: Float = 0F, yOffset: Float = 0F): List<RelativeDrilling> =
+        map {
+            it.xPosition.offset += if (it.xPosition.referenceType == ReferenceType.BEGIN) xOffset else -xOffset
+            it.yPosition.offset += if (it.yPosition.referenceType == ReferenceType.BEGIN) yOffset else -yOffset
+            it
         }
-
-* */

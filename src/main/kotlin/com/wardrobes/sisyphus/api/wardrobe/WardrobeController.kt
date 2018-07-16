@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.*
 class WardrobeController(val repository: WardrobeRepository) {
 
     @GetMapping
-    fun all() = repository.findAll()
+    fun getAll() = repository.findAll()
 
-    @PostMapping
-    fun add(@RequestBody wardrobe: WardrobeDetails) = repository.save(wardrobe)
+    @GetMapping("/{id}")
+    fun get(@PathVariable id: Long) = repository.findById(id)
 
     @PostMapping
     fun create(@RequestBody wardrobe: SimpleWardrobe) = repository.save(WardrobeDetails.newInstance(wardrobe))
@@ -25,7 +25,4 @@ class WardrobeController(val repository: WardrobeRepository) {
 
     @DeleteMapping("/{id}")
     fun remove(@PathVariable id: Long) = repository.delete(repository.findById(id).get())
-
-    @GetMapping("/{id}")
-    fun get(@PathVariable id: Long) = repository.findById(id)
 }
