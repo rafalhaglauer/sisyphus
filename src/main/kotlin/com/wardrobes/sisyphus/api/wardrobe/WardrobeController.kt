@@ -11,8 +11,8 @@ class WardrobeController(val repository: WardrobeRepository) {
     @GetMapping
     fun all() = repository.findAll()
 
-    @PostMapping
-    fun add(@RequestBody wardrobe: WardrobeDetails) = repository.save(wardrobe)
+//    @PostMapping
+//    fun add(@RequestBody wardrobe: WardrobeDetails) = repository.save(wardrobe)
 
     @PostMapping
     fun create(@RequestBody wardrobe: SimpleWardrobe) = repository.save(WardrobeDetails.newInstance(wardrobe))

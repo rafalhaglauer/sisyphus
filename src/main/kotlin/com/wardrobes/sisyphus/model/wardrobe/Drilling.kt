@@ -9,11 +9,10 @@ import javax.persistence.Id
 data class Drilling(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long = 0,
-        var elementId: Long = 0,
-        var xPosition: Float,
-        var yPosition: Float,
-        var depth: Float,
-        var diameter: Float) {
+        var xPosition: Float = 0F,
+        var yPosition: Float = 0F,
+        var depth: Float = 0F,
+        var diameter: Float = 0F) {
 
         companion object {
 
