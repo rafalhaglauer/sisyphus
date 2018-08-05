@@ -11,7 +11,7 @@ sealed class WardrobeFactory(val elementFactory: ElementFactory) {
 object HangingWardrobeFactory : WardrobeFactory(elementFactory = HangingWardrobeElementFactory) {
 
     override fun createWardrobe(symbol: String, width: Float, height: Float, depth: Float, elementHeight: Float): WardrobeDetails {
-        val wardrobe = WardrobeDetails(symbol = symbol, type = WardrobeType.HANGING, width = width, height = height, depth = depth)
+        val wardrobe = WardrobeDetails(symbol = symbol, type = Wardrobe.Type.HANGING, width = width, height = height, depth = depth)
 
         listOf(
                 createTopPanel(wardrobeWidth = width, wardrobeDepth = depth, elementHeight = elementHeight),
@@ -40,7 +40,7 @@ object HangingWardrobeFactory : WardrobeFactory(elementFactory = HangingWardrobe
 object StandingWardrobeFactory : WardrobeFactory(elementFactory = StandingWardrobeElementFactory) {
 
     override fun createWardrobe(symbol: String, width: Float, height: Float, depth: Float, elementHeight: Float): WardrobeDetails {
-        val wardrobe = WardrobeDetails(symbol = symbol, type = WardrobeType.HANGING, width = width, height = height, depth = depth)
+        val wardrobe = WardrobeDetails(symbol = symbol, type = Wardrobe.Type.STANDING, width = width, height = height, depth = depth)
 
         listOf(
                 createTopPanel(wardrobeWidth = width, wardrobeDepth = depth, elementHeight = elementHeight),
