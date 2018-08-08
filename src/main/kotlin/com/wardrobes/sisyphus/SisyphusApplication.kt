@@ -26,7 +26,7 @@ fun main(args: Array<String>) {
 //        println("Elements:")
 //        println()
 //        elements.forEach {
-//            println("Element:")
+//            println("ElementDetails:")
 //            println("name: ${it.name}")
 //            println("length: ${it.length}")
 //            println("width: ${it.width}")
@@ -35,8 +35,8 @@ fun main(args: Array<String>) {
 //            println()
 //            println("Drillings:")
 //            println()
-//            it.drillings.forEach {
-//                println("Drilling")
+//            it.drillingDetails.forEach {
+//                println("DrillingDetails")
 //                println("xPosition: ${it.xPosition}")
 //                println("yPosition: ${it.yPosition}")
 //                println("depth: ${it.depth}")

@@ -1,60 +1,91 @@
 package com.wardrobes.sisyphus.api.wardrobe
 
-import com.wardrobes.sisyphus.model.wardrobe.Wardrobe
-import com.wardrobes.sisyphus.model.wardrobe.WardrobeDetails
+import com.wardrobes.sisyphus.model.drilling.driller.HangingWardrobePanelDriller
+import com.wardrobes.sisyphus.model.drilling.driller.ShelfDriller
+import com.wardrobes.sisyphus.model.drilling.driller.StandingWardrobePanelDriller
+import com.wardrobes.sisyphus.model.wardrobe.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/wardrobe")
-class WardrobeController(val repository: WardrobeRepository) {
+class WardrobeController(val wardrobeRepository: WardrobeRepository) {
 
     @GetMapping
-    fun getAll(@RequestParam("creationType") creationType: Wardrobe.CreationType) = repository.findAll().filter { it.creationType == creationType }
+    fun getAll(@RequestParam("creationType") creationType: Wardrobe.CreationType) = wardrobeRepository.findAll().filter { it.creationType == creationType }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: Long) = repository.findById(id)
+    fun get(@PathVariable id: Long) = wardrobeRepository.findById(id)
 
     @PostMapping
-    fun create(@RequestBody wardrobe: Wardrobe, @RequestParam("creationType") creationType: Wardrobe.CreationType) =
-            when (creationType) {
-                Wardrobe.CreationType.STANDARD -> repository.save(WardrobeDetails.standardWardrobe(wardrobe))
-                Wardrobe.CreationType.CUSTOM -> repository.save(WardrobeDetails.customWardrobe(wardrobe))
-                Wardrobe.CreationType.UNDEFINED -> repository.save(WardrobeDetails.unknown())
-            }.id
+    fun create(@RequestBody wardrobe: Wardrobe, @RequestParam("creationType") creationType: Wardrobe.CreationType): Long {
+        val wardrobeDetails = wardrobe.toDetails(creationType)
+        if (creationType == Wardrobe.CreationType.STANDARD) wardrobeDetails.appendElements()
+        return wardrobeRepository.save(wardrobeDetails).id
+    }
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody wardrobe: Wardrobe): Long {
-        var wardrobeDetails = repository.findById(id).get()
-        repository.deleteById(id)
-        when (wardrobeDetails.creationType) {
-            Wardrobe.CreationType.CUSTOM -> {
-                wardrobeDetails.apply {
-                    symbol = wardrobe.symbol
-                    width = wardrobe.width
-                    height = wardrobe.height
-                    depth = wardrobe.depth
-                    type = wardrobe.type
-                }
+        val old = wardrobeRepository.findById(id).get()
+
+        if (old.creationType == Wardrobe.CreationType.CUSTOM) {
+            old.apply {
+                symbol = wardrobe.symbol
+                width = wardrobe.width
+                height = wardrobe.height
+                depth = wardrobe.depth
+                type = wardrobe.type
             }
-            Wardrobe.CreationType.STANDARD -> {
-                wardrobeDetails = WardrobeDetails.standardWardrobe(wardrobe)
-            }
+            return wardrobeRepository.save(old).id
         }
 
-        return repository.save(wardrobeDetails).id
+        if (old.creationType == Wardrobe.CreationType.STANDARD) {
+            wardrobeRepository.deleteById(id)
+            val new = wardrobe.toDetails(Wardrobe.CreationType.STANDARD)
+            new.appendElements()
+            return wardrobeRepository.save(new).id
+        }
+        return 0
     }
 
     @DeleteMapping("/{id}")
     fun remove(@PathVariable id: Long): Boolean {
-        repository.deleteById(id)
+        wardrobeRepository.deleteById(id)
         return true
     }
 
-    @PostMapping("/{id}/copy")
-    fun copy(@PathVariable("id") wardrobeId: Long, @RequestParam("symbol") wardrobeSymbol: String) =
-            repository.findById(wardrobeId).get().apply {
-                id = 0
-                symbol = wardrobeSymbol
-                creationType = Wardrobe.CreationType.CUSTOM
-            }.let { repository.save(it).id }
+    @PostMapping("/copy")
+    fun copy(@RequestParam("id") wardrobeId: Long, @RequestParam("symbol") wardrobeSymbol: String): Long {
+        val oldWardrobe = wardrobeRepository.findById(wardrobeId).get()
+        val newWardrobe = oldWardrobe.copy(wardrobeSymbol)
+        oldWardrobe.elements.forEach { oldElement ->
+
+            val newElement = oldElement.copy()
+
+            oldElement.drillings.forEach {
+                newElement.addDrilling(it.copy())
+            }
+
+            newWardrobe.add(newElement)
+        }
+        return wardrobeRepository.save(newWardrobe).id
+    }
+}
+
+private fun WardrobeDetails.appendElements() {
+    when (type!!) {
+        Wardrobe.Type.HANGING -> HangingWardrobeFactory
+        Wardrobe.Type.STANDING -> StandingWardrobeFactory
+    }.createElements(this).forEach {
+        val elementDetails = it.toDetails()
+
+        val drillings = mutableListOf<DrillingDetails>()
+        when (type) {
+            Wardrobe.Type.HANGING -> HangingWardrobePanelDriller.createDrillings(elementDetails).also { drillings.addAll(it) }
+            Wardrobe.Type.STANDING -> StandingWardrobePanelDriller.createDrillings(elementDetails).also { drillings.addAll(it) }
+        }
+        ShelfDriller.createDrillings(elementDetails, 3).also { drillings.addAll(it) }
+        drillings.forEach { elementDetails.addDrilling(it) }
+
+        add(elementDetails)
+    }
 }

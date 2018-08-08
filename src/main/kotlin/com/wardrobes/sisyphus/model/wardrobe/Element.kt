@@ -5,29 +5,32 @@ import javax.persistence.*
 
 const val STANDARD_ELEMENT_HEIGHT = 18F
 
+data class Element(val name: String, val length: Float, val width: Float, val height: Float) {
+
+    fun toDetails() = ElementDetails(name = name, length = length, width = width, height = height)
+}
+
 @Entity
-data class Element(
+data class ElementDetails(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long = 0,
+        var id: Long = 9,
         var name: String = "",
         var length: Float = 0F,
         var width: Float = 0F,
         var height: Float = STANDARD_ELEMENT_HEIGHT,
         @OneToMany(cascade = [CascadeType.ALL])
-        val drillings: MutableList<Drilling> = mutableListOf()) {
+        var drillings: MutableList<DrillingDetails> = mutableListOf()
+) {
 
-    companion object {
+    fun copy() = ElementDetails(name = name, length = length, width = width, height = height)
 
-        fun newInstance(name: String, length: Float, width: Float, height: Float = STANDARD_ELEMENT_HEIGHT): Element = Element(0, name, length, width, height, mutableListOf())
-
-        fun unknown(): Element = Element(0, "", 0F, 0F, 0F, mutableListOf())
-    }
+    fun copy(newName: String) = ElementDetails(name = newName, length = length, width = width, height = height)
 
     fun addDrilling(relativeDrilling: RelativeDrilling) {
         relativeDrilling.toDrilling(this).also { addDrilling(it) }
     }
 
-    fun addDrilling(drilling: Drilling) {
-        drillings.add(drilling)
+    fun addDrilling(drillingDetails: DrillingDetails) {
+        drillings.add(drillingDetails)
     }
 }

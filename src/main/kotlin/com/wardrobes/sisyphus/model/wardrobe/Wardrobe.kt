@@ -2,19 +2,13 @@ package com.wardrobes.sisyphus.model.wardrobe
 
 import javax.persistence.*
 
-data class Wardrobe(var symbol: String = "",
-                    var width: Float = 0F,
-                    var height: Float = 0F,
-                    var depth: Float = 0F,
-                    var type: Type = Type.UNDEFINED) {
+data class Wardrobe(val symbol: String, val width: Float, val height: Float, val depth: Float, val type: Type) {
 
-    enum class Type {
-        STANDING, HANGING, UNDEFINED
-    }
+    fun toDetails(creationType: Wardrobe.CreationType) = WardrobeDetails(symbol = symbol, width = width, height = height, depth = depth, type = type, creationType = creationType)
 
-    enum class CreationType {
-        CUSTOM, STANDARD, UNDEFINED
-    }
+    enum class Type { STANDING, HANGING }
+
+    enum class CreationType { CUSTOM, STANDARD }
 }
 
 @Entity
@@ -25,39 +19,22 @@ data class WardrobeDetails(
         var width: Float = 0F,
         var height: Float = 0F,
         var depth: Float = 0F,
-        var type: Wardrobe.Type = Wardrobe.Type.UNDEFINED,
-        var creationType: Wardrobe.CreationType = Wardrobe.CreationType.UNDEFINED,
+        var type: Wardrobe.Type? = null,
+        var creationType: Wardrobe.CreationType? = null,
         @OneToMany(cascade = [CascadeType.ALL])
-        var elements: MutableList<Element> = mutableListOf()) {
+        var elements: MutableList<ElementDetails> = mutableListOf()
+) {
 
-    companion object {
+    fun copy(wardrobeSymbol: String) = WardrobeDetails(
+            symbol = wardrobeSymbol,
+            width = width,
+            height = height,
+            depth = depth,
+            type = type,
+            creationType = Wardrobe.CreationType.CUSTOM
+    )
 
-        fun standardWardrobe(wardrobe: Wardrobe) = wardrobe.run {
-            when (type) {
-                Wardrobe.Type.STANDING -> StandingWardrobeFactory
-                Wardrobe.Type.HANGING -> HangingWardrobeFactory
-                Wardrobe.Type.UNDEFINED -> UndefinedWardrobeFactory
-            }.createWardrobe(symbol, width, height, depth).apply {
-                this.creationType = Wardrobe.CreationType.STANDARD
-            }
-        }
-
-        fun customWardrobe(wardrobe: Wardrobe) = wardrobe.run {
-            WardrobeDetails(
-                    symbol = symbol,
-                    width = width,
-                    height = height,
-                    depth = depth,
-                    type = type,
-                    creationType = Wardrobe.CreationType.CUSTOM
-            )
-        }
-
-        fun unknown(): WardrobeDetails = WardrobeDetails(0, "", 0F, 0F, 0F, Wardrobe.Type.UNDEFINED, Wardrobe.CreationType.UNDEFINED, mutableListOf())
-
-    }
-
-    fun addElement(element: Element) {
+    fun add(element: ElementDetails) {
         elements.add(element)
     }
 }

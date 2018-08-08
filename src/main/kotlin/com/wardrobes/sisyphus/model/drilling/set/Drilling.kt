@@ -1,7 +1,7 @@
 package com.wardrobes.sisyphus.model.drilling.set
 
-import com.wardrobes.sisyphus.model.wardrobe.Drilling
-import com.wardrobes.sisyphus.model.wardrobe.Element
+import com.wardrobes.sisyphus.model.wardrobe.DrillingDetails
+import com.wardrobes.sisyphus.model.wardrobe.ElementDetails
 
 interface RelativeDrillingSet {
 
@@ -12,8 +12,8 @@ class RelativeDrilling(val xPosition: RelativePosition = RelativePosition(), val
 
     constructor(xPosition: RelativePosition = RelativePosition(), yPosition: RelativePosition = RelativePosition(), drillingType: DrillingType, condition: (Int) -> Boolean = { true }) : this(xPosition, yPosition, drillingType.depth, drillingType.diameter, condition)
 
-    fun toDrilling(element: Element): Drilling = with(element) {
-        Drilling(
+    fun toDrilling(element: ElementDetails): DrillingDetails = with(element) {
+        DrillingDetails(
                 xPosition = xPosition.toAbsolute(width),
                 yPosition = yPosition.toAbsolute(length),
                 diameter = diameter,
