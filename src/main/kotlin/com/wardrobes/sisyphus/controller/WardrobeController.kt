@@ -19,16 +19,17 @@ class WardrobeController(
     fun get(@PathVariable id: Long) = wardrobeRepository.findById(id).get()
 
     @PostMapping
-    fun create(@RequestBody wardrobe: WardrobeLight, @RequestParam("creationType") creationType: Wardrobe.CreationType): Long {
+    fun create(@RequestBody wardrobe: WardrobeLight): Long {
         val createdWardrobe = wardrobeRepository.save(wardrobe.toFull())
         if (createdWardrobe.creationType == Wardrobe.CreationType.STANDARD) {
             when (createdWardrobe.type) {
                 Wardrobe.Type.HANGING -> {
                     val drillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == PANEL_HANHING_WARDROBE_COMPOSITION_NAME }
-                    val elements = HangingWardrobeElementFactory.createElements(wardrobe, 18f).map { it.toFull(createdWardrobe) }.also {
+                    val elements = HangingWardrobeElementFactory.createElements(createdWardrobe, 18f).map { it.toFull(createdWardrobe) }.also {
                         it.forEach { elementRepository.save(it) }
                     }
                     val panel = elements.first { it.name == "Wieniec" }
+                    val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {
                         referenceElementRelativeDrillingCompositionRepository.save(
                                 ReferenceElementRelativeDrillingCompositionLight(
@@ -56,7 +57,7 @@ class WardrobeController(
                                                 percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
                                         ),
                                         yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 10F, reference = Offset.Reference.END), // TODO OFFSET END VERIFICATION AND REPAIR
+                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.END),
                                                 percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
                                         ),
                                         elementId = it.id,
@@ -69,7 +70,7 @@ class WardrobeController(
                 Wardrobe.Type.STANDING -> {
                     val bottomPanelDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME }
                     val supportingBarDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME }
-                    val elements = StandingWardrobeElementFactory.createElements(wardrobe, 18f).map { it.toFull(createdWardrobe) }.also {
+                    val elements = StandingWardrobeElementFactory.createElements(createdWardrobe, 18f).map { it.toFull(createdWardrobe) }.also {
                         it.forEach { elementRepository.save(it) }
                     }
                     val bottomPanel = elements.first { it.name == "Wieniec dolny" }
@@ -118,7 +119,7 @@ class WardrobeController(
                                                 percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
                                         ),
                                         yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 10F, reference = Offset.Reference.END), // TODO OFFSET END VERIFICATION AND REPAIR
+                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.END), // TODO OFFSET END VERIFICATION AND REPAIR
                                                 percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
                                         ),
                                         elementId = it.id,

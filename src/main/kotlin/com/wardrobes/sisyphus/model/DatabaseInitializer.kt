@@ -23,6 +23,7 @@ class DatabaseInitializer(
         )
         listOf(
                 RelativeDrillingLight(
+                        name = "Kołek - początek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 40F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -30,6 +31,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = panelHangingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Konfirmat - początek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 60F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -37,6 +39,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = panelHangingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Kołek - środek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -44,6 +47,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = panelHangingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Konfirmat - koniec",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 60F, reference = Offset.Reference.END), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -51,6 +55,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = panelHangingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Kołek - koniec",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 40F, reference = Offset.Reference.END), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -70,6 +75,7 @@ class DatabaseInitializer(
         )
         listOf(
                 RelativeDrillingLight(
+                        name = "Konfirmat - początek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 40F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -77,6 +83,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Kołek - początek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 60F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -84,6 +91,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Konfirmat - środek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -91,6 +99,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Kołek - koniec",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 60F, reference = Offset.Reference.END), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -98,6 +107,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Konfirmat - koniec",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 40F, reference = Offset.Reference.END), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -115,6 +125,7 @@ class DatabaseInitializer(
         )
         listOf(
                 RelativeDrillingLight(
+                        name = "Kołek - początek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 25F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -122,6 +133,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = supportingBarStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Konfirmat - środek",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
@@ -129,6 +141,7 @@ class DatabaseInitializer(
                         relativeDrillingCompositionId = supportingBarStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
+                        name = "Kołek - koniec",
                         xOffset = CompositeOffsetLight(offset = OffsetLight(value = 25F, reference = Offset.Reference.END), percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)),
                         yOffset = CompositeOffsetLight(offset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN), percentageOffset = OffsetLight(value = 0.5F, reference = Offset.Reference.BEGIN)),
                         diameter = 8F,
