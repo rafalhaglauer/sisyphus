@@ -138,10 +138,11 @@ class WardrobeController(
     fun update(@PathVariable id: Long, @RequestBody wardrobe: WardrobeLight) {
         wardrobeRepository.findById(id).get().apply {
             symbol = wardrobe.symbol
+            width = wardrobe.width
             height = wardrobe.height
             depth = wardrobe.depth
             type = wardrobe.type
-        }
+        }.also { wardrobeRepository.save(it) }
     }
 
     @DeleteMapping("/{id}")
