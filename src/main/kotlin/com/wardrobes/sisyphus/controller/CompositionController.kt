@@ -38,26 +38,16 @@ class CompositionController(
             this.relativeDrillingComposition = relativeDrillingComposition
             this.xOffset.apply {
                 val light = composition.xOffset
-                this.offset.apply {
-                    this.value = light.offset.value
-                    this.reference = light.offset.reference
-                }
-                this.percentageOffset.apply {
-                    this.value = light.percentageOffset.value
-                    this.reference = light.percentageOffset.reference
-                }
+                value = light.value
+                percentageValue = light.value
+                direction = light.direction
             }
             this.xReferenceLength = composition.xReferenceLength
             this.yOffset.apply {
                 val light = composition.yOffset
-                this.offset.apply {
-                    this.value = light.offset.value
-                    this.reference = light.offset.reference
-                }
-                this.percentageOffset.apply {
-                    this.value = light.percentageOffset.value
-                    this.reference = light.percentageOffset.reference
-                }
+                value = light.value
+                percentageValue = light.value
+                direction = light.direction
             }
             this.yReferenceLength = composition.yReferenceLength
         }.also { repository.save(it) }

@@ -99,8 +99,8 @@ data class RelativeDrilling(
     fun toAbsolute(element: Element, referenceElement: Element, xReferenceLength: Element.LengthType, yReferenceLength: Element.LengthType,
                    xOffset: CompositeOffset, yOffset: CompositeOffset): Drilling {
         return Drilling(
-                xPosition = this@RelativeDrilling.xOffset.toAbsolute(referenceElement.getValue(xReferenceLength)) + xOffset.toAbsolute(this@RelativeDrilling.xOffset.toAbsolute(referenceElement.getValue(xReferenceLength))),
-                yPosition = (if (yOffset.offset.reference == Offset.Reference.END) -1 else 1) * this@RelativeDrilling.yOffset.toAbsolute(referenceElement.getValue(yReferenceLength)) + yOffset.toAbsolute(element.length),
+                xPosition = this@RelativeDrilling.xOffset.toAbsolute(referenceElement.getValue(xReferenceLength)) + xOffset.toAbsolute(element.width),
+                yPosition = this@RelativeDrilling.yOffset.toAbsolute(referenceElement.getValue(yReferenceLength)) + yOffset.toAbsolute(element.length),
                 diameter = this@RelativeDrilling.diameter,
                 depth = this@RelativeDrilling.depth,
                 type = Drilling.CreationType.GENERATED,
@@ -112,27 +112,15 @@ data class RelativeDrilling(
 @Entity
 data class CompositeOffset(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
-        @OneToOne(cascade = [(CascadeType.ALL)]) var offset: Offset = Offset(),
-        @OneToOne(cascade = [(CascadeType.ALL)]) var percentageOffset: Offset = Offset()
+        var value: Float = 0F,
+        var percentageValue: Float = 0F,
+        var direction: Direction = Direction.FORWARD
 ) {
     fun toAbsolute(referenceValue: Float): Float {
-        val percentageOffsetFromBegin = with(percentageOffset) { if (reference == Offset.Reference.BEGIN) value else 1 - value }
-        return if (percentageOffsetFromBegin == 0F) {
-            with(offset) { if (reference == Offset.Reference.BEGIN) value else referenceValue - value }
-        } else {
-            val offsetFromBegin = with(offset) { if (reference == Offset.Reference.BEGIN) value else -value }
-            (referenceValue * percentageOffsetFromBegin) + offsetFromBegin
-        }
+        return (percentageValue * referenceValue) + if (direction == Direction.FORWARD) value else -value
     }
-}
 
-@Entity
-data class Offset(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
-        var value: Float = 0f,
-        var reference: Reference = Reference.BEGIN
-) {
-    enum class Reference {
-        BEGIN, END
+    enum class Direction {
+        FORWARD, BACKWARD
     }
 }

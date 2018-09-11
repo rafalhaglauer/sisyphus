@@ -57,8 +57,8 @@ data class DrillingLight(
 data class ReferenceElementRelativeDrillingCompositionLight(
         val xReferenceLength: Element.LengthType,
         val yReferenceLength: Element.LengthType,
-        val xOffset: CompositeOffsetLight,
-        val yOffset: CompositeOffsetLight,
+        val xOffset: OffsetLight,
+        val yOffset: OffsetLight,
         val relativeDrillingCompositionId: Long,
         val referenceElementId: Long,
         val elementId: Long
@@ -90,11 +90,11 @@ data class RelativeDrillingCompositionLight(
 
 data class RelativeDrillingLight(
         val name: String,
-        val xOffset: CompositeOffsetLight,
-        val yOffset: CompositeOffsetLight,
         val diameter: Float,
         val depth: Float,
-        val relativeDrillingCompositionId: Long
+        val relativeDrillingCompositionId: Long,
+        val xOffset: OffsetLight = OffsetLight(),
+        val yOffset: OffsetLight = OffsetLight()
 ) {
     fun toFull(relativeDrillingComposition: RelativeDrillingComposition): RelativeDrilling {
         return RelativeDrilling(
@@ -108,16 +108,10 @@ data class RelativeDrillingLight(
     }
 }
 
-data class CompositeOffsetLight(
-        val offset: OffsetLight,
-        val percentageOffset: OffsetLight
-) {
-    fun toFull(): CompositeOffset = CompositeOffset(offset = offset.toFull(), percentageOffset = percentageOffset.toFull())
-}
-
 data class OffsetLight(
-        val value: Float = 0f,
-        val reference: Offset.Reference
+        var value: Float = 0F,
+        var percentageValue: Float = 0F,
+        var direction: CompositeOffset.Direction = CompositeOffset.Direction.FORWARD
 ) {
-    fun toFull(): Offset = Offset(value = value, reference = reference)
+    fun toFull(): CompositeOffset = CompositeOffset(value = value, percentageValue = percentageValue, direction = direction)
 }

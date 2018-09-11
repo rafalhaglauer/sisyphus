@@ -24,25 +24,21 @@ class WardrobeController(
         if (createdWardrobe.creationType == Wardrobe.CreationType.STANDARD) {
             when (createdWardrobe.type) {
                 Wardrobe.Type.HANGING -> {
-                    val drillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == PANEL_HANHING_WARDROBE_COMPOSITION_NAME }
+                    val drillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == PANEL_HANGING_WARDROBE_COMPOSITION_NAME }
+                    val shelfDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == SHELF_HANGING_WARDROBE_COMPOSITION_NAME }
                     val elements = HangingWardrobeElementFactory.createElements(createdWardrobe, 18f).map { it.toFull(createdWardrobe) }.also {
                         it.forEach { elementRepository.save(it) }
                     }
                     val panel = elements.first { it.name == "Wieniec" }
+                    val shelf = elements.first { it.name == "Półka" }
                     val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {
                         referenceElementRelativeDrillingCompositionRepository.save(
                                 ReferenceElementRelativeDrillingCompositionLight(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
-                                        xOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
-                                        yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
+                                        xOffset = OffsetLight(value = 1F),
+                                        yOffset = OffsetLight(value = 1F),
                                         elementId = it.id,
                                         referenceElementId = panel.id,
                                         relativeDrillingCompositionId = drillingComposition.id
@@ -52,42 +48,80 @@ class WardrobeController(
                                 ReferenceElementRelativeDrillingCompositionLight(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
-                                        xOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
-                                        yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.END),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
+                                        xOffset = OffsetLight(value = 1F),
+                                        yOffset = OffsetLight(
+                                                value = 1F,
+                                                percentageValue = 1F,
+                                                direction = CompositeOffset.Direction.BACKWARD
                                         ),
                                         elementId = it.id,
                                         referenceElementId = panel.id,
                                         relativeDrillingCompositionId = drillingComposition.id
                                 ).toFull(drillingComposition, element = it, referenceElement = panel)
                         )
+
+                        (1..numberOfShelves).forEach { shelfIndex ->
+                            referenceElementRelativeDrillingCompositionRepository.save(
+                                    ReferenceElementRelativeDrillingCompositionLight(
+                                            xReferenceLength = Element.LengthType.WIDTH,
+                                            yReferenceLength = Element.LengthType.HEIGHT,
+                                            xOffset = OffsetLight(value = 20F),
+                                            yOffset = OffsetLight(percentageValue = shelfIndex.toFloat() / (1 + numberOfShelves)),
+                                            elementId = it.id,
+                                            referenceElementId = shelf.id,
+                                            relativeDrillingCompositionId = shelfDrillingComposition.id
+                                    ).toFull(shelfDrillingComposition, element = it, referenceElement = shelf)
+                            )
+                            referenceElementRelativeDrillingCompositionRepository.save(
+                                    ReferenceElementRelativeDrillingCompositionLight(
+                                            xReferenceLength = Element.LengthType.WIDTH,
+                                            yReferenceLength = Element.LengthType.HEIGHT,
+                                            xOffset = OffsetLight(value = 20F),
+                                            yOffset = OffsetLight(
+                                                    value = 32F,
+                                                    percentageValue = shelfIndex.toFloat() / (1 + numberOfShelves)
+                                            ),
+                                            elementId = it.id,
+                                            referenceElementId = shelf.id,
+                                            relativeDrillingCompositionId = shelfDrillingComposition.id
+                                    ).toFull(shelfDrillingComposition, element = it, referenceElement = shelf)
+                            )
+                            referenceElementRelativeDrillingCompositionRepository.save(
+                                    ReferenceElementRelativeDrillingCompositionLight(
+                                            xReferenceLength = Element.LengthType.WIDTH,
+                                            yReferenceLength = Element.LengthType.HEIGHT,
+                                            xOffset = OffsetLight(value = 20F),
+                                            yOffset = OffsetLight(
+                                                    value = 32F,
+                                                    direction = CompositeOffset.Direction.BACKWARD,
+                                                    percentageValue = shelfIndex.toFloat() / (1 + numberOfShelves)
+                                            ),
+                                            elementId = it.id,
+                                            referenceElementId = shelf.id,
+                                            relativeDrillingCompositionId = shelfDrillingComposition.id
+                                    ).toFull(shelfDrillingComposition, element = it, referenceElement = shelf)
+                            )
+                        }
                     }
                 }
                 Wardrobe.Type.STANDING -> {
                     val bottomPanelDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME }
                     val supportingBarDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME }
+                    val shelfDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == SHELF_STANDING_WARDROBE_COMPOSITION_NAME }
                     val elements = StandingWardrobeElementFactory.createElements(createdWardrobe, 18f).map { it.toFull(createdWardrobe) }.also {
                         it.forEach { elementRepository.save(it) }
                     }
                     val bottomPanel = elements.first { it.name == "Wieniec dolny" }
                     val supportingBar = elements.first { it.name == "Listwa wspierająca" }
+                    val shelf = elements.first { it.name == "Półka" }
+                    val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {
                         referenceElementRelativeDrillingCompositionRepository.save(
                                 ReferenceElementRelativeDrillingCompositionLight(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
-                                        xOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
-                                        yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
+                                        xOffset = OffsetLight(1F),
+                                        yOffset = OffsetLight(1F),
                                         elementId = it.id,
                                         referenceElementId = supportingBar.id,
                                         relativeDrillingCompositionId = supportingBarDrillingComposition.id
@@ -97,14 +131,8 @@ class WardrobeController(
                                 ReferenceElementRelativeDrillingCompositionLight(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
-                                        xOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.END), // TODO 1 + nuta!
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
-                                        yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
+                                        xOffset = OffsetLight(1F), // TODO 1 + nuta!
+                                        yOffset = OffsetLight(1F),
                                         elementId = it.id,
                                         referenceElementId = supportingBar.id,
                                         relativeDrillingCompositionId = supportingBarDrillingComposition.id
@@ -114,19 +142,59 @@ class WardrobeController(
                                 ReferenceElementRelativeDrillingCompositionLight(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
-                                        xOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.BEGIN),
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
-                                        yOffset = CompositeOffsetLight(
-                                                offset = OffsetLight(value = 1F, reference = Offset.Reference.END), // TODO OFFSET END VERIFICATION AND REPAIR
-                                                percentageOffset = OffsetLight(value = 0F, reference = Offset.Reference.BEGIN)
-                                        ),
+                                        xOffset = OffsetLight(1F),
+                                        yOffset = OffsetLight(
+                                                value = 1F,
+                                                direction = CompositeOffset.Direction.BACKWARD,
+                                                percentageValue = 1F
+                                        ), // TODO OFFSET END VERIFICATION AND REPAIR
                                         elementId = it.id,
                                         referenceElementId = bottomPanel.id,
                                         relativeDrillingCompositionId = bottomPanelDrillingComposition.id
                                 ).toFull(bottomPanelDrillingComposition, element = it, referenceElement = bottomPanel)
                         )
+
+                        (1..numberOfShelves).forEach { shelfIndex ->
+                            referenceElementRelativeDrillingCompositionRepository.save(
+                                    ReferenceElementRelativeDrillingCompositionLight(
+                                            xReferenceLength = Element.LengthType.WIDTH,
+                                            yReferenceLength = Element.LengthType.HEIGHT,
+                                            xOffset = OffsetLight(value = 20F),
+                                            yOffset = OffsetLight(percentageValue = shelfIndex.toFloat() / (1 + numberOfShelves)),
+                                            elementId = it.id,
+                                            referenceElementId = shelf.id,
+                                            relativeDrillingCompositionId = shelfDrillingComposition.id
+                                    ).toFull(shelfDrillingComposition, element = it, referenceElement = shelf))
+
+                            referenceElementRelativeDrillingCompositionRepository.save(
+                                    ReferenceElementRelativeDrillingCompositionLight(
+                                            xReferenceLength = Element.LengthType.WIDTH,
+                                            yReferenceLength = Element.LengthType.HEIGHT,
+                                            xOffset = OffsetLight(value = 20F),
+                                            yOffset = OffsetLight(
+                                                    value = 32F,
+                                                    percentageValue = shelfIndex.toFloat() / (1 + numberOfShelves)
+                                            ),
+                                            elementId = it.id,
+                                            referenceElementId = shelf.id,
+                                            relativeDrillingCompositionId = shelfDrillingComposition.id
+                                    ).toFull(shelfDrillingComposition, element = it, referenceElement = shelf))
+
+                            referenceElementRelativeDrillingCompositionRepository.save(
+                                    ReferenceElementRelativeDrillingCompositionLight(
+                                            xReferenceLength = Element.LengthType.WIDTH,
+                                            yReferenceLength = Element.LengthType.HEIGHT,
+                                            xOffset = OffsetLight(value = 20F),
+                                            yOffset = OffsetLight(
+                                                    value = 32F,
+                                                    direction = CompositeOffset.Direction.BACKWARD,
+                                                    percentageValue = shelfIndex.toFloat() / (1 + numberOfShelves)
+                                            ),
+                                            elementId = it.id,
+                                            referenceElementId = shelf.id,
+                                            relativeDrillingCompositionId = shelfDrillingComposition.id
+                                    ).toFull(shelfDrillingComposition, element = it, referenceElement = shelf))
+                        }
                     }
                 }
             }
