@@ -38,7 +38,7 @@ class WardrobeController(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
                                         xOffset = OffsetLight(value = 1F),
-                                        yOffset = OffsetLight(value = 1F),
+                                        yOffset = OffsetLight(value = (panel.height / 2) + 1F),
                                         elementId = it.id,
                                         referenceElementId = panel.id,
                                         relativeDrillingCompositionId = drillingComposition.id
@@ -50,7 +50,7 @@ class WardrobeController(
                                         yReferenceLength = Element.LengthType.HEIGHT,
                                         xOffset = OffsetLight(value = 1F),
                                         yOffset = OffsetLight(
-                                                value = 1F,
+                                                value = (panel.height / 2) + 1F,
                                                 percentageValue = 1F,
                                                 direction = CompositeOffset.Direction.BACKWARD
                                         ),
@@ -121,7 +121,7 @@ class WardrobeController(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
                                         xOffset = OffsetLight(1F),
-                                        yOffset = OffsetLight(1F),
+                                        yOffset = OffsetLight((supportingBar.height / 2) + 1F),
                                         elementId = it.id,
                                         referenceElementId = supportingBar.id,
                                         relativeDrillingCompositionId = supportingBarDrillingComposition.id
@@ -132,7 +132,7 @@ class WardrobeController(
                                         xReferenceLength = Element.LengthType.WIDTH,
                                         yReferenceLength = Element.LengthType.HEIGHT,
                                         xOffset = OffsetLight(1F), // TODO 1 + nuta!
-                                        yOffset = OffsetLight(1F),
+                                        yOffset = OffsetLight((supportingBar.height / 2) + 1F),
                                         elementId = it.id,
                                         referenceElementId = supportingBar.id,
                                         relativeDrillingCompositionId = supportingBarDrillingComposition.id
@@ -144,7 +144,7 @@ class WardrobeController(
                                         yReferenceLength = Element.LengthType.HEIGHT,
                                         xOffset = OffsetLight(1F),
                                         yOffset = OffsetLight(
-                                                value = 1F,
+                                                value = (bottomPanel.height / 2) + 1F,
                                                 direction = CompositeOffset.Direction.BACKWARD,
                                                 percentageValue = 1F
                                         ), // TODO OFFSET END VERIFICATION AND REPAIR

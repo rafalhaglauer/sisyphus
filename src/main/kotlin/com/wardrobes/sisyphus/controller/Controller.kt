@@ -51,6 +51,11 @@ class RelativeDrillingCompositionController(private val repository: RelativeDril
     @PostMapping
     fun create(@RequestBody relativeDrillingComposition: RelativeDrillingCompositionLight): Long = repository.save(relativeDrillingComposition.toFull()).id
 
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) {
+        repository.deleteById(id)
+    }
+
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody relativeDrillingComposition: RelativeDrillingCompositionLight) {
         repository.findById(id).get().apply {
@@ -77,6 +82,11 @@ class RelativeDrillingController(
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): RelativeDrilling = repository.findById(id).get()
 
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) {
+        repository.deleteById(id)
+    }
+
     @PostMapping
     fun create(@RequestBody relativeDrilling: RelativeDrillingLight): Long {
         val relativeDrillingComposition = relativeDrillingCompositionRepository.findById(relativeDrilling.relativeDrillingCompositionId).get()
@@ -86,10 +96,11 @@ class RelativeDrillingController(
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody relativeDrilling: RelativeDrillingLight) {
         repository.findById(id).get().apply {
+            name = relativeDrilling.name
             xOffset = relativeDrilling.xOffset.toFull()
             yOffset = relativeDrilling.yOffset.toFull()
             diameter = relativeDrilling.diameter
             depth = relativeDrilling.depth
-        }
+        }.also { repository.save(it) }
     }
 }
