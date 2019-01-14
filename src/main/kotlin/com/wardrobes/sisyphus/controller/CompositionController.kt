@@ -12,13 +12,14 @@ class CompositionController(
 ) {
 
     @GetMapping("/all/{elementId}")
-    fun getAll(@PathVariable elementId: Long): Collection<ReferenceElementRelativeDrillingComposition> {
-        return repository.findAll()
+    fun getAll(@PathVariable elementId: Long): Collection<ElementDrillingSetComposition> {
+        return repository
+                .findAll()
                 .filter { it.element.id == elementId }
     }
 
     @GetMapping("/{compositionId}")
-    fun get(@PathVariable compositionId: Long): ReferenceElementRelativeDrillingComposition {
+    fun get(@PathVariable compositionId: Long): ElementDrillingSetComposition {
         return repository.findById(compositionId).get()
     }
 
@@ -27,38 +28,45 @@ class CompositionController(
         repository.deleteById(compositionId)
     }
 
-    @PutMapping("/{compositionId}")
-    fun update(@PathVariable compositionId: Long, @RequestBody composition: ReferenceElementRelativeDrillingCompositionLight) {
-        val element = elementRepository.findById(composition.elementId).get()
-        val referenceElement = elementRepository.findById(composition.referenceElementId).get()
-        val relativeDrillingComposition = relativeDrillingCompositionRepository.findById(composition.relativeDrillingCompositionId).get()
-        repository.findById(compositionId).get().apply {
-            this.element = element
-            this.referenceElement = element
-            this.relativeDrillingComposition = relativeDrillingComposition
-            this.xOffset.apply {
-                val light = composition.xOffset
-                value = light.value
-                percentageValue = light.value
-                direction = light.direction
-            }
-            this.xReferenceLength = composition.xReferenceLength
-            this.yOffset.apply {
-                val light = composition.yOffset
-                value = light.value
-                percentageValue = light.value
-                direction = light.direction
-            }
-            this.yReferenceLength = composition.yReferenceLength
-        }.also { repository.save(it) }
-        repository.save(composition.toFull(relativeDrillingComposition, element = element, referenceElement = referenceElement))
-    }
+//    @PutMapping("/{compositionId}")
+//    fun update(@PathVariable compositionId: Long, @RequestBody setComposition: CompositeOffset) {
+//        val element = elementRepository.findById(setComposition.elementId).get()
+//        val relativeDrillingComposition = relativeDrillingCompositionRepository.findById(setComposition.relativeDrillingCompositionId).get()
+//        repository.findById(compositionId).get().apply {
+//            this.element = element
+//            this.drillingSet = relativeDrillingComposition
+//            this.xOffset.apply {
+//                val light = setComposition.xOffset
+//                value = light.value
+//                percentageValue = light.value
+//                direction = light.direction
+//            }
+//            this.yOffset.apply {
+//                val light = setComposition.yOffset
+//                value = light.value
+//                percentageValue = light.value
+//                direction = light.direction
+//            }
+//        }.also { repository.save(it) }
+//        repository.save(setComposition.toFull(relativeDrillingComposition, element = element))
+//    }
 
     @PostMapping
-    fun create(@RequestBody composition: ReferenceElementRelativeDrillingCompositionLight) {
-        val element = elementRepository.findById(composition.elementId).get()
-        val referenceElement = elementRepository.findById(composition.referenceElementId).get()
-        val relativeDrillingComposition = relativeDrillingCompositionRepository.findById(composition.relativeDrillingCompositionId).get()
-        repository.save(composition.toFull(relativeDrillingComposition, element = element, referenceElement = referenceElement))
+    fun create(@RequestBody requestBody: CreateElementDrillingSetCompositionRequestBody) {
+        val element = elementRepository.findById(requestBody.elementId).get()
+        val drillingSet = relativeDrillingCompositionRepository.findById(requestBody.drillingSetId).get()
+        repository.save(ElementDrillingSetComposition(
+                xOffset = requestBody.xOffset,
+                yOffset = requestBody.yOffset,
+                drillingSet = drillingSet,
+                element = element)
+        )
     }
 }
+
+class CreateElementDrillingSetCompositionRequestBody(
+        val xOffset: Offset,
+        val yOffset: Offset,
+        val elementId: Long,
+        val drillingSetId: Long
+)

@@ -11,12 +11,9 @@ data class Wardrobe(
         var width: Float = 0f,
         var height: Float = 0f,
         var depth: Float = 0f,
-        var type: Type = Type.STANDING,
-        var creationType: CreationType = CreationType.STANDARD
+        var type: Type = Type.BOTTOM
 ) {
-    enum class Type { STANDING, HANGING }
-
-    enum class CreationType { CUSTOM, STANDARD }
+    enum class Type { BOTTOM, UPPER }
 }
 
 @Entity
@@ -26,24 +23,8 @@ data class Element(
         var length: Float = 0f,
         var width: Float = 0f,
         var height: Float = 0f,
-        val creationType: CreationType = CreationType.CUSTOM,
         @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) var wardrobe: Wardrobe = Wardrobe()
-) {
-    enum class LengthType {
-        LENGTH, WIDTH, HEIGHT
-    }
-
-    enum class CreationType {
-        CUSTOM, GENERATED
-    }
-
-    fun getValue(lengthType: LengthType): Float =
-            when (lengthType) {
-                LengthType.LENGTH -> length
-                LengthType.WIDTH -> width
-                LengthType.HEIGHT -> height
-            }
-}
+)
 
 @Entity
 data class Drilling(
@@ -55,62 +36,47 @@ data class Drilling(
         var depth: Float = 0f,
         var type: CreationType = CreationType.CUSTOM,
         @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) var element: Element = Element()
-) {
-    enum class CreationType {
-        CUSTOM, GENERATED
-    }
-}
-
-@Entity
-data class ReferenceElementRelativeDrillingComposition(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
-        @OneToOne @OnDelete(action = OnDeleteAction.CASCADE) var relativeDrillingComposition: RelativeDrillingComposition = RelativeDrillingComposition(),
-        @OneToOne @OnDelete(action = OnDeleteAction.CASCADE) var referenceElement: Element = Element(),
-        @OneToOne @OnDelete(action = OnDeleteAction.CASCADE) var element: Element = Element(),
-        @OneToOne(cascade = [(CascadeType.ALL)]) var xOffset: CompositeOffset = CompositeOffset(),
-        @OneToOne(cascade = [(CascadeType.ALL)]) var yOffset: CompositeOffset = CompositeOffset(),
-        var xReferenceLength: Element.LengthType = Element.LengthType.WIDTH,
-        var yReferenceLength: Element.LengthType = Element.LengthType.HEIGHT
 )
 
 @Entity
-data class RelativeDrillingComposition(
+data class ElementDrillingSetComposition(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
-        var name: String = "",
-        var suggestXReferenceValue: String = "",
-        var suggestYReferenceValue: String = "",
-        var creationType: CreationType = CreationType.GENERATED
-) {
-    enum class CreationType {
-        GENERATED, CUSTOM
-    }
-}
+        @OneToOne @OnDelete(action = OnDeleteAction.CASCADE) var drillingSet: RelativeDrillingSet = RelativeDrillingSet(),
+        @OneToOne @OnDelete(action = OnDeleteAction.CASCADE) var element: Element = Element(),
+        @OneToOne(cascade = [(CascadeType.ALL)]) var xOffset: Offset = Offset(),
+        @OneToOne(cascade = [(CascadeType.ALL)]) var yOffset: Offset = Offset()
+)
+
+@Entity
+data class RelativeDrillingSet(
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
+        var name: String = ""
+)
 
 @Entity
 data class RelativeDrilling(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
         var name: String = "",
-        @OneToOne(cascade = [(CascadeType.ALL)]) var xOffset: CompositeOffset = CompositeOffset(),
-        @OneToOne(cascade = [(CascadeType.ALL)]) var yOffset: CompositeOffset = CompositeOffset(),
+        @OneToOne(cascade = [(CascadeType.ALL)]) var xOffset: Offset = Offset(),
+        @OneToOne(cascade = [(CascadeType.ALL)]) var yOffset: Offset = Offset(),
         var diameter: Float = 0f,
         var depth: Float = 0f,
-        @ManyToOne var relativeDrillingComposition: RelativeDrillingComposition = RelativeDrillingComposition()
+        @ManyToOne var relativeDrillingSet: RelativeDrillingSet = RelativeDrillingSet()
 ) {
-    fun toAbsolute(element: Element, referenceElement: Element, xReferenceLength: Element.LengthType, yReferenceLength: Element.LengthType,
-                   xOffset: CompositeOffset, yOffset: CompositeOffset): Drilling {
+    fun toAbsolute(element: Element, xOffset: Offset, yOffset: Offset): Drilling {
         return Drilling(
-                xPosition = this@RelativeDrilling.xOffset.toAbsolute(referenceElement.getValue(xReferenceLength)) + xOffset.toAbsolute(element.width),
-                yPosition = this@RelativeDrilling.yOffset.toAbsolute(referenceElement.getValue(yReferenceLength)) + yOffset.toAbsolute(element.length),
+                xPosition = this@RelativeDrilling.xOffset.toAbsolute(element.width) + xOffset.toAbsolute(element.width),
+                yPosition = this@RelativeDrilling.yOffset.toAbsolute(element.height) + yOffset.toAbsolute(element.length),
                 diameter = this@RelativeDrilling.diameter,
                 depth = this@RelativeDrilling.depth,
-                type = Drilling.CreationType.GENERATED,
+                type = CreationType.GENERATE,
                 element = element
         )
     }
 }
 
 @Entity
-data class CompositeOffset(
+data class Offset(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
         var value: Float = 0F,
         var percentageValue: Float = 0F,
@@ -123,4 +89,9 @@ data class CompositeOffset(
     enum class Direction {
         FORWARD, BACKWARD
     }
+}
+
+enum class CreationType {
+
+    CUSTOM, GENERATE
 }

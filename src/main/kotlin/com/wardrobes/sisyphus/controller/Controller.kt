@@ -19,7 +19,7 @@ class ElementController(
     @PostMapping
     fun create(@RequestBody element: ElementLight): Long {
         val wardrobe = wardrobeRepository.findById(element.wardrobeId).get()
-        return elementRepository.save(element.toFull(wardrobe, Element.CreationType.CUSTOM)).id
+        return elementRepository.save(element.toFull(wardrobe)).id
     }
 
     @PutMapping("/{id}")
@@ -43,13 +43,13 @@ class ElementController(
 class RelativeDrillingCompositionController(private val repository: RelativeDrillingCompositionRepository) {
 
     @GetMapping("/all")
-    fun getAll(): Collection<RelativeDrillingComposition> = repository.findAll().toList()
+    fun getAll(): Collection<RelativeDrillingSet> = repository.findAll().toList()
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): RelativeDrillingComposition = repository.findById(id).get()
+    fun get(@PathVariable id: Long): RelativeDrillingSet = repository.findById(id).get()
 
     @PostMapping
-    fun create(@RequestBody relativeDrillingComposition: RelativeDrillingCompositionLight): Long = repository.save(relativeDrillingComposition.toFull()).id
+    fun create(@RequestBody relativeDrillingSet: RelativeDrillingSetLight): Long = repository.save(relativeDrillingSet.toFull()).id
 
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long) {
@@ -57,11 +57,9 @@ class RelativeDrillingCompositionController(private val repository: RelativeDril
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody relativeDrillingComposition: RelativeDrillingCompositionLight) {
+    fun update(@PathVariable id: Long, @RequestBody relativeDrillingSet: RelativeDrillingSetLight) {
         repository.findById(id).get().apply {
-            name = relativeDrillingComposition.name
-            suggestXReferenceValue = relativeDrillingComposition.suggestXReferenceValue
-            suggestYReferenceValue = relativeDrillingComposition.suggestYReferenceValue
+            name = relativeDrillingSet.name
         }
     }
 }
@@ -76,7 +74,7 @@ class RelativeDrillingController(
     @GetMapping("/all/{relativeDrillingCompositionId}")
     fun getAll(@PathVariable relativeDrillingCompositionId: Long): Collection<RelativeDrilling> =
             repository.findAll()
-                    .filter { it.relativeDrillingComposition.id == relativeDrillingCompositionId }
+                    .filter { it.relativeDrillingSet.id == relativeDrillingCompositionId }
                     .toList()
 
     @GetMapping("/{id}")

@@ -5,16 +5,14 @@ data class WardrobeLight(
         var width: Float,
         var height: Float,
         var depth: Float,
-        var type: Wardrobe.Type,
-        var creationType: Wardrobe.CreationType
+        var type: Wardrobe.Type
 ) {
     fun toFull(): Wardrobe = Wardrobe(
             symbol = symbol,
             width = width,
             height = height,
             depth = depth,
-            type = type,
-            creationType = creationType
+            type = type
     )
 }
 
@@ -25,12 +23,11 @@ data class ElementLight(
         val height: Float,
         val wardrobeId: Long
 ) {
-    fun toFull(wardrobe: Wardrobe, creationType: Element.CreationType = Element.CreationType.GENERATED): Element = Element(
+    fun toFull(wardrobe: Wardrobe): Element = Element(
             name = name,
             length = length,
             width = width,
             height = height,
-            creationType = creationType,
             wardrobe = wardrobe
     )
 }
@@ -48,44 +45,14 @@ data class DrillingLight(
                 yPosition = yPosition,
                 diameter = diameter,
                 depth = depth,
-                type = Drilling.CreationType.CUSTOM,
+                type = CreationType.CUSTOM,
                 element = element
         )
     }
 }
 
-data class ReferenceElementRelativeDrillingCompositionLight(
-        val xReferenceLength: Element.LengthType,
-        val yReferenceLength: Element.LengthType,
-        val xOffset: OffsetLight,
-        val yOffset: OffsetLight,
-        val relativeDrillingCompositionId: Long,
-        val referenceElementId: Long,
-        val elementId: Long
-) {
-    fun toFull(relativeDrillingComposition: RelativeDrillingComposition, referenceElement: Element, element: Element): ReferenceElementRelativeDrillingComposition {
-        return ReferenceElementRelativeDrillingComposition(
-                xReferenceLength = xReferenceLength,
-                yReferenceLength = yReferenceLength,
-                xOffset = xOffset.toFull(),
-                yOffset = yOffset.toFull(),
-                relativeDrillingComposition = relativeDrillingComposition,
-                referenceElement = referenceElement,
-                element = element)
-    }
-}
-
-data class RelativeDrillingCompositionLight(
-        val name: String,
-        val suggestXReferenceValue: String,
-        val suggestYReferenceValue: String
-) {
-    fun toFull(creationType: RelativeDrillingComposition.CreationType = RelativeDrillingComposition.CreationType.CUSTOM): RelativeDrillingComposition = RelativeDrillingComposition(
-            name = name,
-            suggestXReferenceValue = suggestXReferenceValue,
-            suggestYReferenceValue = suggestYReferenceValue,
-            creationType = creationType
-    )
+data class RelativeDrillingSetLight(val name: String) {
+    fun toFull(): RelativeDrillingSet = RelativeDrillingSet(name = name)
 }
 
 data class RelativeDrillingLight(
@@ -96,14 +63,14 @@ data class RelativeDrillingLight(
         val xOffset: OffsetLight = OffsetLight(),
         val yOffset: OffsetLight = OffsetLight()
 ) {
-    fun toFull(relativeDrillingComposition: RelativeDrillingComposition): RelativeDrilling {
+    fun toFull(relativeDrillingSet: RelativeDrillingSet): RelativeDrilling {
         return RelativeDrilling(
                 name = name,
                 xOffset = xOffset.toFull(),
                 yOffset = yOffset.toFull(),
                 diameter = diameter,
                 depth = depth,
-                relativeDrillingComposition = relativeDrillingComposition
+                relativeDrillingSet = relativeDrillingSet
         )
     }
 }
@@ -111,7 +78,7 @@ data class RelativeDrillingLight(
 data class OffsetLight(
         var value: Float = 0F,
         var percentageValue: Float = 0F,
-        var direction: CompositeOffset.Direction = CompositeOffset.Direction.FORWARD
+        var direction: Offset.Direction = Offset.Direction.FORWARD
 ) {
-    fun toFull(): CompositeOffset = CompositeOffset(value = value, percentageValue = percentageValue, direction = direction)
+    fun toFull(): Offset = Offset(value = value, percentageValue = percentageValue, direction = direction)
 }

@@ -21,14 +21,11 @@ class DrillingController(
                 .filter { it.element.id == elementId }
                 .forEach { referenceElementRelativeDrillingComposition ->
                     relativeDrillingGroup
-                            .filter { it.relativeDrillingComposition == referenceElementRelativeDrillingComposition.relativeDrillingComposition }
+                            .filter { it.relativeDrillingSet == referenceElementRelativeDrillingComposition.drillingSet }
                             .map {
                                 referenceElementRelativeDrillingComposition.xOffset
                                 it.toAbsolute(
                                         element = referenceElementRelativeDrillingComposition.element,
-                                        referenceElement = referenceElementRelativeDrillingComposition.referenceElement,
-                                        xReferenceLength = referenceElementRelativeDrillingComposition.xReferenceLength,
-                                        yReferenceLength = referenceElementRelativeDrillingComposition.yReferenceLength,
                                         xOffset = referenceElementRelativeDrillingComposition.xOffset,
                                         yOffset = referenceElementRelativeDrillingComposition.yOffset
                                 )

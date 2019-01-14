@@ -8,8 +8,8 @@ interface ElementRepository : CrudRepository<Element, Long>
 
 interface RelativeDrillingRepository : CrudRepository<RelativeDrilling, Long>
 
-interface RelativeDrillingCompositionRepository : CrudRepository<RelativeDrillingComposition, Long>
+interface RelativeDrillingCompositionRepository : CrudRepository<RelativeDrillingSet, Long>
 
-interface ReferenceElementRelativeDrillingCompositionRepository : CrudRepository<ReferenceElementRelativeDrillingComposition, Long>
+interface ReferenceElementRelativeDrillingCompositionRepository : CrudRepository<ElementDrillingSetComposition, Long>
 
 interface DrillingRepository : CrudRepository<Drilling, Long>

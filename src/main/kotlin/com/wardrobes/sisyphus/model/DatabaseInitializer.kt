@@ -18,11 +18,7 @@ class DatabaseInitializer(
 
     private fun createHangingWardrobeComposition() {
         val panelHangingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingCompositionLight(
-                        name = PANEL_HANGING_WARDROBE_COMPOSITION_NAME,
-                        suggestXReferenceValue = "Wieniec - szerokość",
-                        suggestYReferenceValue = "Wieniec - wysokość")
-                        .toFull(RelativeDrillingComposition.CreationType.GENERATED)
+                RelativeDrillingSetLight(name = PANEL_HANGING_WARDROBE_COMPOSITION_NAME).toFull()
         )
         listOf(
                 RelativeDrillingLight(
@@ -48,14 +44,14 @@ class DatabaseInitializer(
                 ),
                 RelativeDrillingLight(
                         name = "Konfirmat - koniec",
-                        xOffset = OffsetLight(value = 60F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
                         relativeDrillingCompositionId = panelHangingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
                         name = "Kołek - koniec",
-                        xOffset = OffsetLight(value = 40F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
                         relativeDrillingCompositionId = panelHangingWardrobeComposition.id
@@ -65,11 +61,7 @@ class DatabaseInitializer(
 
     private fun createStandingWardrobeComposition() {
         val bottomPanelStandingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingCompositionLight(
-                        name = BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME,
-                        suggestXReferenceValue = "Wieniec - szerokość",
-                        suggestYReferenceValue = "Wieniec - wysokość")
-                        .toFull(RelativeDrillingComposition.CreationType.GENERATED)
+                RelativeDrillingSetLight(name = BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME).toFull()
         )
         listOf(
                 RelativeDrillingLight(
@@ -95,14 +87,14 @@ class DatabaseInitializer(
                 ),
                 RelativeDrillingLight(
                         name = "Kołek - koniec",
-                        xOffset = OffsetLight(value = 60F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
                         relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
                 ),
                 RelativeDrillingLight(
                         name = "Konfirmat - koniec",
-                        xOffset = OffsetLight(value = 40F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
                         relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
@@ -110,11 +102,7 @@ class DatabaseInitializer(
         ).forEach { relativeDrillingRepository.save(it.toFull(bottomPanelStandingWardrobeComposition)) }
 
         val supportingBarStandingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingCompositionLight(
-                        name = SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME,
-                        suggestXReferenceValue = "Listwa wspierająca - szerokość",
-                        suggestYReferenceValue = "Listwa wspierająca - wysokość")
-                        .toFull(RelativeDrillingComposition.CreationType.GENERATED)
+                RelativeDrillingSetLight(name = SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME).toFull()
         )
         listOf(
                 RelativeDrillingLight(
@@ -133,7 +121,7 @@ class DatabaseInitializer(
                 ),
                 RelativeDrillingLight(
                         name = "Kołek - koniec",
-                        xOffset = OffsetLight(value = 25F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(value = 25F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
                         relativeDrillingCompositionId = supportingBarStandingWardrobeComposition.id
@@ -143,11 +131,7 @@ class DatabaseInitializer(
 
     private fun createShelfDrillingComposition() {
         val shelfStandingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingCompositionLight(
-                        name = SHELF_STANDING_WARDROBE_COMPOSITION_NAME,
-                        suggestXReferenceValue = "Półka - szerokość",
-                        suggestYReferenceValue = "Półka - wysokość")
-                        .toFull(RelativeDrillingComposition.CreationType.GENERATED)
+                RelativeDrillingSetLight(name = SHELF_STANDING_WARDROBE_COMPOSITION_NAME).toFull()
         )
         listOf(
                 RelativeDrillingLight(
@@ -159,7 +143,7 @@ class DatabaseInitializer(
                 ),
                 RelativeDrillingLight(
                         name = "Podpórka - koniec",
-                        xOffset = OffsetLight(60F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 5F,
                         depth = 12F,
                         relativeDrillingCompositionId = shelfStandingWardrobeComposition.id
@@ -167,11 +151,7 @@ class DatabaseInitializer(
         ).forEach { relativeDrillingRepository.save(it.toFull(shelfStandingWardrobeComposition)) }
 
         val shelfHangingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingCompositionLight(
-                        name = SHELF_HANGING_WARDROBE_COMPOSITION_NAME,
-                        suggestXReferenceValue = "Półka - szerokość",
-                        suggestYReferenceValue = "Półka - wysokość")
-                        .toFull(RelativeDrillingComposition.CreationType.GENERATED)
+                RelativeDrillingSetLight(name = SHELF_HANGING_WARDROBE_COMPOSITION_NAME).toFull()
         )
         listOf(
                 RelativeDrillingLight(
@@ -183,7 +163,7 @@ class DatabaseInitializer(
                 ),
                 RelativeDrillingLight(
                         name = "Podpórka - koniec",
-                        xOffset = OffsetLight(40F, percentageValue = 1F, direction = CompositeOffset.Direction.BACKWARD),
+                        xOffset = OffsetLight(40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 5F,
                         depth = 12F,
                         relativeDrillingCompositionId = shelfStandingWardrobeComposition.id
