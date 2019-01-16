@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/drilling")
 class DrillingController(
-        private val referenceElementRelativeDrillingCompositionRepository: ReferenceElementRelativeDrillingCompositionRepository,
+        private val elementDrillingSetCompositionRepository: ElementDrillingSetCompositionRepository,
         private val relativeDrillingRepository: RelativeDrillingRepository,
         private val drillingRepository: DrillingRepository,
         private val elementRepository: ElementRepository
@@ -16,7 +16,7 @@ class DrillingController(
         val relativeDrillingGroup = relativeDrillingRepository.findAll()
         val drillingGroup = mutableListOf<Drilling>()
 
-        referenceElementRelativeDrillingCompositionRepository
+        elementDrillingSetCompositionRepository
                 .findAll()
                 .filter { it.element.id == elementId }
                 .forEach { referenceElementRelativeDrillingComposition ->
@@ -43,14 +43,14 @@ class DrillingController(
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): Drilling = drillingRepository.findById(id).get()
 
-    @PostMapping
-    fun create(@RequestBody drilling: DrillingLight): Long {
-        val element = elementRepository.findById(drilling.elementId).get()
-        return drillingRepository.save(drilling.toFull(element)).id
+    @PostMapping("/{elementId}")
+    fun create(@RequestBody drilling: Drilling, @PathVariable elementId: Long): Long {
+        val element = elementRepository.findById(elementId).get()
+        return drillingRepository.save(drilling.apply { this.element = element }).id
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody drilling: DrillingLight) {
+    fun update(@PathVariable id: Long, @RequestBody drilling: Drilling) {
         drillingRepository.findById(id).get().apply {
             xPosition = drilling.xPosition
             yPosition = drilling.yPosition

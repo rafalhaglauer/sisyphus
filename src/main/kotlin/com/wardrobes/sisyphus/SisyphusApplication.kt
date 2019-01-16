@@ -1,8 +1,8 @@
 package com.wardrobes.sisyphus
 
 import com.wardrobes.sisyphus.model.DatabaseInitializer
-import com.wardrobes.sisyphus.model.RelativeDrillingCompositionRepository
 import com.wardrobes.sisyphus.model.RelativeDrillingRepository
+import com.wardrobes.sisyphus.model.RelativeDrillingSetRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
@@ -22,10 +22,10 @@ fun main(args: Array<String>) {
 @Component
 class DataLoader @Autowired constructor(
         private val relativeDrillingRepository: RelativeDrillingRepository,
-        private val relativeDrillingCompositionRepository: RelativeDrillingCompositionRepository
+        private val relativeDrillingSetRepository: RelativeDrillingSetRepository
 ) : ApplicationRunner {
 
     override fun run(args: ApplicationArguments) {
-        DatabaseInitializer(relativeDrillingCompositionRepository, relativeDrillingRepository).init()
+        DatabaseInitializer(relativeDrillingSetRepository, relativeDrillingRepository).init()
     }
 }

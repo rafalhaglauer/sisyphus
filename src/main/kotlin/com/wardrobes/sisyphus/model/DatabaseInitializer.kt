@@ -7,7 +7,7 @@ const val SHELF_STANDING_WARDROBE_COMPOSITION_NAME = "Standardowa szafa dolna | 
 const val SHELF_HANGING_WARDROBE_COMPOSITION_NAME = "Standardowa szafa wisząca | półka"
 
 class DatabaseInitializer(
-        private val relativeDrillingCompositionRepository: RelativeDrillingCompositionRepository,
+        private val relativeDrillingSetRepository: RelativeDrillingSetRepository,
         private val relativeDrillingRepository: RelativeDrillingRepository
 ) {
     fun init() {
@@ -17,158 +17,156 @@ class DatabaseInitializer(
     }
 
     private fun createHangingWardrobeComposition() {
-        val panelHangingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingSetLight(name = PANEL_HANGING_WARDROBE_COMPOSITION_NAME).toFull()
-        )
+        val panelHangingWardrobeComposition = relativeDrillingSetRepository.save(RelativeDrillingSet(name = PANEL_HANGING_WARDROBE_COMPOSITION_NAME))
         listOf(
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - początek",
-                        xOffset = OffsetLight(value = 40F),
+                        xOffset = Offset(value = 40F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = panelHangingWardrobeComposition.id
+                        relativeDrillingSet = panelHangingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Konfirmat - początek",
-                        xOffset = OffsetLight(value = 60F),
+                        xOffset = Offset(value = 60F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = panelHangingWardrobeComposition.id
+                        relativeDrillingSet = panelHangingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - środek",
-                        xOffset = OffsetLight(percentageValue = 0.5F),
+                        xOffset = Offset(percentageValue = 0.5F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = panelHangingWardrobeComposition.id
+                        relativeDrillingSet = panelHangingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Konfirmat - koniec",
-                        xOffset = OffsetLight(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = panelHangingWardrobeComposition.id
+                        relativeDrillingSet = panelHangingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - koniec",
-                        xOffset = OffsetLight(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = panelHangingWardrobeComposition.id
+                        relativeDrillingSet = panelHangingWardrobeComposition
                 )
-        ).forEach { relativeDrillingRepository.save(it.toFull(panelHangingWardrobeComposition)) }
+        ).forEach { relativeDrillingRepository.save(it) }
     }
 
     private fun createStandingWardrobeComposition() {
-        val bottomPanelStandingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingSetLight(name = BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME).toFull()
+        val bottomPanelStandingWardrobeComposition = relativeDrillingSetRepository.save(
+                RelativeDrillingSet(name = BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME)
         )
         listOf(
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Konfirmat - początek",
-                        xOffset = OffsetLight(value = 40F),
+                        xOffset = Offset(value = 40F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
+                        relativeDrillingSet = bottomPanelStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - początek",
-                        xOffset = OffsetLight(value = 60F),
+                        xOffset = Offset(value = 60F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
+                        relativeDrillingSet = bottomPanelStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Konfirmat - środek",
-                        xOffset = OffsetLight(percentageValue = 0.5F),
+                        xOffset = Offset(percentageValue = 0.5F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
+                        relativeDrillingSet = bottomPanelStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - koniec",
-                        xOffset = OffsetLight(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
+                        relativeDrillingSet = bottomPanelStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Konfirmat - koniec",
-                        xOffset = OffsetLight(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = bottomPanelStandingWardrobeComposition.id
+                        relativeDrillingSet = bottomPanelStandingWardrobeComposition
                 )
-        ).forEach { relativeDrillingRepository.save(it.toFull(bottomPanelStandingWardrobeComposition)) }
+        ).forEach { relativeDrillingRepository.save(it) }
 
-        val supportingBarStandingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingSetLight(name = SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME).toFull()
+        val supportingBarStandingWardrobeComposition = relativeDrillingSetRepository.save(
+                RelativeDrillingSet(name = SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME)
         )
         listOf(
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - początek",
-                        xOffset = OffsetLight(25F),
+                        xOffset = Offset(value = 25F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = supportingBarStandingWardrobeComposition.id
+                        relativeDrillingSet = supportingBarStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Konfirmat - środek",
-                        xOffset = OffsetLight(percentageValue = 0.5F),
+                        xOffset = Offset(percentageValue = 0.5F),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = supportingBarStandingWardrobeComposition.id
+                        relativeDrillingSet = supportingBarStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Kołek - koniec",
-                        xOffset = OffsetLight(value = 25F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 25F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 8F,
                         depth = 12F,
-                        relativeDrillingCompositionId = supportingBarStandingWardrobeComposition.id
+                        relativeDrillingSet = supportingBarStandingWardrobeComposition
                 )
-        ).forEach { relativeDrillingRepository.save(it.toFull(supportingBarStandingWardrobeComposition)) }
+        ).forEach { relativeDrillingRepository.save(it) }
     }
 
     private fun createShelfDrillingComposition() {
-        val shelfStandingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingSetLight(name = SHELF_STANDING_WARDROBE_COMPOSITION_NAME).toFull()
+        val shelfStandingWardrobeComposition = relativeDrillingSetRepository.save(
+                RelativeDrillingSet(name = SHELF_STANDING_WARDROBE_COMPOSITION_NAME)
         )
         listOf(
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Podpórka - początek",
-                        xOffset = OffsetLight(70F),
+                        xOffset = Offset(value = 70F),
                         diameter = 5F,
                         depth = 12F,
-                        relativeDrillingCompositionId = shelfStandingWardrobeComposition.id
+                        relativeDrillingSet = shelfStandingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Podpórka - koniec",
-                        xOffset = OffsetLight(60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 60F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 5F,
                         depth = 12F,
-                        relativeDrillingCompositionId = shelfStandingWardrobeComposition.id
+                        relativeDrillingSet = shelfStandingWardrobeComposition
                 )
-        ).forEach { relativeDrillingRepository.save(it.toFull(shelfStandingWardrobeComposition)) }
+        ).forEach { relativeDrillingRepository.save(it) }
 
-        val shelfHangingWardrobeComposition = relativeDrillingCompositionRepository.save(
-                RelativeDrillingSetLight(name = SHELF_HANGING_WARDROBE_COMPOSITION_NAME).toFull()
+        val shelfHangingWardrobeComposition = relativeDrillingSetRepository.save(
+                RelativeDrillingSet(name = SHELF_HANGING_WARDROBE_COMPOSITION_NAME)
         )
         listOf(
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Podpórka - początek",
-                        xOffset = OffsetLight(50F),
+                        xOffset = Offset(value = 50F),
                         diameter = 5F,
                         depth = 12F,
-                        relativeDrillingCompositionId = shelfStandingWardrobeComposition.id
+                        relativeDrillingSet = shelfHangingWardrobeComposition
                 ),
-                RelativeDrillingLight(
+                RelativeDrilling(
                         name = "Podpórka - koniec",
-                        xOffset = OffsetLight(40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
+                        xOffset = Offset(value = 40F, percentageValue = 1F, direction = Offset.Direction.BACKWARD),
                         diameter = 5F,
                         depth = 12F,
-                        relativeDrillingCompositionId = shelfStandingWardrobeComposition.id
+                        relativeDrillingSet = shelfHangingWardrobeComposition
                 )
-        ).forEach { relativeDrillingRepository.save(it.toFull(shelfHangingWardrobeComposition)) }
+        ).forEach { relativeDrillingRepository.save(it) }
 
     }
 }

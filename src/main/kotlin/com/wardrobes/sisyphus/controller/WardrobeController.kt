@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*
 class WardrobeController(
         private val wardrobeRepository: WardrobeRepository,
         private val elementRepository: ElementRepository,
-        private val relativeDrillingCompositionRepository: RelativeDrillingCompositionRepository,
-        private val referenceElementRelativeDrillingCompositionRepository: ReferenceElementRelativeDrillingCompositionRepository
+        private val relativeDrillingSetRepository: RelativeDrillingSetRepository,
+        private val elementDrillingSetCompositionRepository: ElementDrillingSetCompositionRepository
 ) {
 
     @GetMapping
@@ -19,18 +19,17 @@ class WardrobeController(
     fun get(@PathVariable id: Long) = wardrobeRepository.findById(id).get()
 
     @PostMapping
-    fun create(@RequestBody wardrobe: WardrobeLight, @RequestParam("creationType") creationType: CreationType): Long {
-        val createdWardrobe = wardrobeRepository.save(wardrobe.toFull())
+    fun create(@RequestBody wardrobe: Wardrobe, @RequestParam("creationType") creationType: CreationType): Long {
+        val createdWardrobe = wardrobeRepository.save(wardrobe)
         if (creationType == CreationType.GENERATE) {
             when (createdWardrobe.type) {
                 Wardrobe.Type.UPPER -> {
-                    val panelDrillingSet = relativeDrillingCompositionRepository.findAll().first { it.name == PANEL_HANGING_WARDROBE_COMPOSITION_NAME }
+                    val panelDrillingSet = relativeDrillingSetRepository.findAll().first { it.name == PANEL_HANGING_WARDROBE_COMPOSITION_NAME }
                     val elements = HangingWardrobeElementFactory.createElements(createdWardrobe, 18f)
-                            .map { it.toFull(createdWardrobe) }
                             .map { elementRepository.save(it) }
                     val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {
-                        referenceElementRelativeDrillingCompositionRepository.save(
+                        elementDrillingSetCompositionRepository.save(
                                 ElementDrillingSetComposition(
                                         xOffset = Offset(value = 1F),
                                         yOffset = Offset(value = (it.height / 2) + 1F),
@@ -38,7 +37,7 @@ class WardrobeController(
                                         element = it
                                 )
                         )
-                        referenceElementRelativeDrillingCompositionRepository.save(
+                        elementDrillingSetCompositionRepository.save(
                                 ElementDrillingSetComposition(
                                         xOffset = Offset(value = 1F),
                                         yOffset = Offset(
@@ -54,14 +53,13 @@ class WardrobeController(
                     }
                 }
                 Wardrobe.Type.BOTTOM -> {
-                    val bottomPanelDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME }
-                    val supportingBarDrillingComposition = relativeDrillingCompositionRepository.findAll().first { it.name == SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME }
+                    val bottomPanelDrillingComposition = relativeDrillingSetRepository.findAll().first { it.name == BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME }
+                    val supportingBarDrillingComposition = relativeDrillingSetRepository.findAll().first { it.name == SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME }
                     val elements = StandingWardrobeElementFactory.createElements(createdWardrobe, 18f)
-                            .map { it.toFull(createdWardrobe) }
                             .map { elementRepository.save(it) }
                     val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {
-                        referenceElementRelativeDrillingCompositionRepository.save(
+                        elementDrillingSetCompositionRepository.save(
                                 ElementDrillingSetComposition(
                                         xOffset = Offset(value = 1F),
                                         yOffset = Offset(value = (it.height / 2) + 1F),
@@ -69,7 +67,7 @@ class WardrobeController(
                                         element = it
                                 )
                         )
-                        referenceElementRelativeDrillingCompositionRepository.save(
+                        elementDrillingSetCompositionRepository.save(
                                 ElementDrillingSetComposition(
                                         xOffset = Offset(value = 1F), // TODO 1 + nuta!
                                         yOffset = Offset(value = (it.height / 2) + 1F),
@@ -77,7 +75,7 @@ class WardrobeController(
                                         element = it
                                 )
                         )
-                        referenceElementRelativeDrillingCompositionRepository.save(
+                        elementDrillingSetCompositionRepository.save(
                                 ElementDrillingSetComposition(
                                         xOffset = Offset(value = 1F),
                                         yOffset = Offset(
@@ -98,7 +96,7 @@ class WardrobeController(
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody wardrobe: WardrobeLight) {
+    fun update(@PathVariable id: Long, @RequestBody wardrobe: Wardrobe) {
         wardrobeRepository.findById(id).get().apply {
             symbol = wardrobe.symbol
             width = wardrobe.width
@@ -113,12 +111,8 @@ class WardrobeController(
         wardrobeRepository.deleteById(id)
     }
 
-    private fun Element.addDrillingListForPanels(wardrobeType: Wardrobe.Type) {
-
-    }
-
     private fun Element.addDrillingListForShelves(numberOfShelves: Int, wardrobeType: Wardrobe.Type) {
-        createDrillingSetCompositionsForShelves(numberOfShelves, wardrobeType).forEach { referenceElementRelativeDrillingCompositionRepository.save(it) }
+        createDrillingSetCompositionsForShelves(numberOfShelves, wardrobeType).forEach { elementDrillingSetCompositionRepository.save(it) }
     }
 
 
@@ -126,7 +120,7 @@ class WardrobeController(
             when (wardrobeType) {
                 Wardrobe.Type.UPPER -> SHELF_HANGING_WARDROBE_COMPOSITION_NAME
                 Wardrobe.Type.BOTTOM -> SHELF_STANDING_WARDROBE_COMPOSITION_NAME
-            }.let { name -> relativeDrillingCompositionRepository.findAll().first { it.name == name } }
+            }.let { name -> relativeDrillingSetRepository.findAll().first { it.name == name } }
                     .let {
                         mutableListOf<ElementDrillingSetComposition>().apply {
                             (1..numberOfShelves).forEach { shelfIndex ->
