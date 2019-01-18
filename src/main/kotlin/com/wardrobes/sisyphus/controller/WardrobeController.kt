@@ -19,7 +19,7 @@ class WardrobeController(
     fun get(@PathVariable id: Long) = wardrobeRepository.findById(id).get()
 
     @PostMapping
-    fun create(@RequestBody wardrobe: Wardrobe, @RequestParam("creationType") creationType: CreationType): Long {
+    fun create(@RequestBody wardrobe: Wardrobe, @RequestParam("creationType") creationType: CreationType) {
         val createdWardrobe = wardrobeRepository.save(wardrobe)
         if (creationType == CreationType.GENERATE) {
             when (createdWardrobe.type) {
@@ -92,7 +92,6 @@ class WardrobeController(
                 }
             }
         }
-        return createdWardrobe.id
     }
 
     @PutMapping("/{id}")

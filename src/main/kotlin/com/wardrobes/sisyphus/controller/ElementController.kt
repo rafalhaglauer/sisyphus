@@ -19,9 +19,9 @@ class ElementController(
     fun get(@PathVariable id: Long): Element = elementRepository.findById(id).get()
 
     @PostMapping("/{wardrobeId}")
-    fun create(@RequestBody createElement: Element, @PathVariable wardrobeId: Long): Long {
+    fun create(@RequestBody createElement: Element, @PathVariable wardrobeId: Long) {
         val wardrobe = wardrobeRepository.findById(wardrobeId).get()
-        return elementRepository.save(createElement.apply { this.wardrobe = wardrobe }).id
+        elementRepository.save(createElement.apply { this.wardrobe = wardrobe })
     }
 
     @PutMapping("/{id}")
