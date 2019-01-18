@@ -1,15 +1,18 @@
 package com.wardrobes.sisyphus.controller
 
-import com.wardrobes.sisyphus.model.*
-import org.springframework.web.bind.annotation.*
+import com.wardrobes.sisyphus.model.Drilling
+import com.wardrobes.sisyphus.model.ElementDrillingSetCompositionRepository
+import com.wardrobes.sisyphus.model.RelativeDrillingRepository
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/drilling")
 class DrillingController(
         private val elementDrillingSetCompositionRepository: ElementDrillingSetCompositionRepository,
-        private val relativeDrillingRepository: RelativeDrillingRepository,
-        private val drillingRepository: DrillingRepository,
-        private val elementRepository: ElementRepository
+        private val relativeDrillingRepository: RelativeDrillingRepository
 ) {
     @GetMapping("/all/{elementId}")
     fun getAll(@PathVariable elementId: Long): Collection<Drilling> {
@@ -19,48 +22,19 @@ class DrillingController(
         elementDrillingSetCompositionRepository
                 .findAll()
                 .filter { it.element.id == elementId }
-                .forEach { referenceElementRelativeDrillingComposition ->
+                .forEach { composition ->
                     relativeDrillingGroup
-                            .filter { it.relativeDrillingSet == referenceElementRelativeDrillingComposition.drillingSet }
+                            .filter { it.relativeDrillingSet == composition.drillingSet }
                             .map {
-                                referenceElementRelativeDrillingComposition.xOffset
                                 it.toAbsolute(
-                                        element = referenceElementRelativeDrillingComposition.element,
-                                        xOffset = referenceElementRelativeDrillingComposition.xOffset,
-                                        yOffset = referenceElementRelativeDrillingComposition.yOffset
+                                        element = composition.element,
+                                        xOffset = composition.xOffset,
+                                        yOffset = composition.yOffset
                                 )
                             }
                             .also { drillingGroup.addAll(it) }
                 }
-        drillingRepository
-                .findAll()
-                .filter { it.element.id == elementId }
-                .also { drillingGroup.addAll(it) }
 
         return drillingGroup
-    }
-
-    @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): Drilling = drillingRepository.findById(id).get()
-
-    @PostMapping("/{elementId}")
-    fun create(@RequestBody drilling: Drilling, @PathVariable elementId: Long): Long {
-        val element = elementRepository.findById(elementId).get()
-        return drillingRepository.save(drilling.apply { this.element = element }).id
-    }
-
-    @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody drilling: Drilling) {
-        drillingRepository.findById(id).get().apply {
-            xPosition = drilling.xPosition
-            yPosition = drilling.yPosition
-            depth = drilling.depth
-            diameter = drilling.diameter
-        }.also { drillingRepository.save(it) }
-    }
-
-    @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) {
-        drillingRepository.deleteById(id)
     }
 }

@@ -1,42 +1,10 @@
 package com.wardrobes.sisyphus.controller
 
-import com.wardrobes.sisyphus.model.*
+import com.wardrobes.sisyphus.model.RelativeDrilling
+import com.wardrobes.sisyphus.model.RelativeDrillingRepository
+import com.wardrobes.sisyphus.model.RelativeDrillingSet
+import com.wardrobes.sisyphus.model.RelativeDrillingSetRepository
 import org.springframework.web.bind.annotation.*
-
-@RestController
-@RequestMapping("/element")
-class ElementController(
-        private val elementRepository: ElementRepository,
-        private val wardrobeRepository: WardrobeRepository
-) {
-
-    @GetMapping("/all/{wardrobeId}")
-    fun getAll(@PathVariable wardrobeId: Long): Collection<Element> = elementRepository.findAll().filter { it.wardrobe.id == wardrobeId }
-
-    @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): Element = elementRepository.findById(id).get()
-
-    @PostMapping("/{wardrobeId}")
-    fun create(@RequestBody createElement: Element, @PathVariable wardrobeId: Long): Long {
-        val wardrobe = wardrobeRepository.findById(wardrobeId).get()
-        return elementRepository.save(createElement.apply { this.wardrobe = wardrobe }).id
-    }
-
-    @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody createElement: Element) {
-        elementRepository.findById(id).get().apply {
-            name = createElement.name
-            length = createElement.length
-            width = createElement.width
-            height = createElement.height
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long) {
-        elementRepository.deleteById(id)
-    }
-}
 
 @RestController
 @RequestMapping("/drilling/relative/composition")

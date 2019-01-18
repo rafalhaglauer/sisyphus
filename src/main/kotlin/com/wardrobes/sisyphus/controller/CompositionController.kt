@@ -1,9 +1,6 @@
 package com.wardrobes.sisyphus.controller
 
-import com.wardrobes.sisyphus.model.ElementDrillingSetComposition
-import com.wardrobes.sisyphus.model.ElementDrillingSetCompositionRepository
-import com.wardrobes.sisyphus.model.ElementRepository
-import com.wardrobes.sisyphus.model.RelativeDrillingSetRepository
+import com.wardrobes.sisyphus.model.*
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -31,36 +28,32 @@ class CompositionController(
         repositorySet.deleteById(compositionId)
     }
 
-//    @PutMapping("/{compositionId}")
-//    fun update(@PathVariable compositionId: Long, @RequestBody setComposition: CompositeOffset) {
-//        val element = elementRepository.findById(setComposition.elementId).get()
-//        val relativeDrillingComposition = relativeDrillingSetRepository.findById(setComposition.relativeDrillingCompositionId).get()
-//        repositorySet.findById(compositionId).get().apply {
-//            this.element = element
-//            this.drillingSet = relativeDrillingComposition
-//            this.xOffset.apply {
-//                val light = setComposition.xOffset
-//                value = light.value
-//                percentageValue = light.value
-//                direction = light.direction
-//            }
-//            this.yOffset.apply {
-//                val light = setComposition.yOffset
-//                value = light.value
-//                percentageValue = light.value
-//                direction = light.direction
-//            }
-//        }.also { repositorySet.save(it) }
-//        repositorySet.save(setComposition.toFull(relativeDrillingComposition, element = element))
-//    }
+    @PutMapping("/{compositionId}")
+    fun update(@PathVariable compositionId: Long, @RequestBody requestBody: ElementDrillingSetCompositionRequest) {
+        repositorySet.findById(compositionId).get().apply {
+            xOffset = requestBody.xOffset.apply { id = xOffset.id }
+            yOffset = requestBody.yOffset.apply { id = yOffset.id }
+        }.also { repositorySet.save(it) }
+    }
 
-    @PostMapping("/{elementId}/add/{drillingSetId}")
-    fun create(@RequestBody requestBody: ElementDrillingSetComposition, @PathVariable elementId: Long, @PathVariable drillingSetId: Long) {
-        val element = elementRepository.findById(elementId).get()
-        val drillingSet = relativeDrillingSetRepository.findById(drillingSetId).get()
-        repositorySet.save(requestBody.apply {
-            this.drillingSet = drillingSet
-            this.element = element
-        })
+    @PostMapping
+    fun create(@RequestBody requestBody: ElementDrillingSetCompositionRequest) {
+        with(requestBody) {
+            val element = elementRepository.findById(elementId).get()
+            val drillingSet = relativeDrillingSetRepository.findById(drillingSetId).get()
+            ElementDrillingSetComposition(
+                    element = element,
+                    drillingSet = drillingSet,
+                    xOffset = xOffset,
+                    yOffset = yOffset
+            ).also { repositorySet.save(it) }
+        }
     }
 }
+
+class ElementDrillingSetCompositionRequest(
+        val elementId: Long,
+        val drillingSetId: Long,
+        val xOffset: Offset,
+        val yOffset: Offset
+)

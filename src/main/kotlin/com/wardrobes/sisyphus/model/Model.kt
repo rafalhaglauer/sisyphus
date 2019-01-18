@@ -17,6 +17,13 @@ data class Wardrobe(
 }
 
 @Entity
+data class Attachment(
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
+        var url: String = "",
+        @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) var wardrobe: Wardrobe = Wardrobe()
+)
+
+@Entity
 data class Element(
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
         var name: String = "",
@@ -26,16 +33,11 @@ data class Element(
         @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) var wardrobe: Wardrobe = Wardrobe()
 )
 
-@Entity
 data class Drilling(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long = 0,
         var xPosition: Float = 0f,
         var yPosition: Float = 0f,
         var diameter: Float = 0f,
-        var depth: Float = 0f,
-        var type: CreationType = CreationType.CUSTOM,
-        @ManyToOne @OnDelete(action = OnDeleteAction.CASCADE) var element: Element = Element()
+        var depth: Float = 0f
 )
 
 @Entity
@@ -68,9 +70,7 @@ data class RelativeDrilling(
                 xPosition = this@RelativeDrilling.xOffset.toAbsolute(element.width) + xOffset.toAbsolute(element.width),
                 yPosition = this@RelativeDrilling.yOffset.toAbsolute(element.height) + yOffset.toAbsolute(element.length),
                 diameter = this@RelativeDrilling.diameter,
-                depth = this@RelativeDrilling.depth,
-                type = CreationType.GENERATE,
-                element = element
+                depth = this@RelativeDrilling.depth
         )
     }
 }
