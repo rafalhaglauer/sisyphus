@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/element")
-class ElementController(
-        private val elementRepository: ElementRepository,
-        private val wardrobeRepository: WardrobeRepository
-) {
+class ElementController(private val elementRepository: ElementRepository, private val wardrobeRepository: WardrobeRepository) {
 
     @GetMapping("/all/{wardrobeId}")
     fun getAll(@PathVariable wardrobeId: Long): Collection<Element> = elementRepository.findAll().filter { it.wardrobe.id == wardrobeId }
@@ -39,3 +36,8 @@ class ElementController(
         elementRepository.deleteById(id)
     }
 }
+
+
+
+
+

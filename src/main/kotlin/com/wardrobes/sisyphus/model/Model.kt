@@ -11,7 +11,8 @@ data class Wardrobe(
         var width: Float = 0f,
         var height: Float = 0f,
         var depth: Float = 0f,
-        var type: Type = Type.BOTTOM
+        var type: Type = Type.BOTTOM,
+        var model3dUrl: String? = null
 ) {
     enum class Type { BOTTOM, UPPER }
 }
