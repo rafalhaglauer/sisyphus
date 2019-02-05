@@ -25,7 +25,7 @@ class WardrobeController(
             when (createdWardrobe.type) {
                 Wardrobe.Type.UPPER -> {
                     val panelDrillingSet = relativeDrillingSetRepository.findAll().first { it.name == PANEL_HANGING_WARDROBE_COMPOSITION_NAME }
-                    val elements = HangingWardrobeElementFactory.createElements(createdWardrobe, 18f)
+                    val elements = TopWardrobeElementFactory.createElements(createdWardrobe, 18f)
                             .map { elementRepository.save(it) }
                     val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {
@@ -55,7 +55,7 @@ class WardrobeController(
                 Wardrobe.Type.BOTTOM -> {
                     val bottomPanelDrillingComposition = relativeDrillingSetRepository.findAll().first { it.name == BOTTOM_PANEL_STANDING_WARDROBE_COMPOSITION_NAME }
                     val supportingBarDrillingComposition = relativeDrillingSetRepository.findAll().first { it.name == SUPPORTING_BAR_STANDING_WARDROBE_COMPOSITION_NAME }
-                    val elements = StandingWardrobeElementFactory.createElements(createdWardrobe, 18f)
+                    val elements = BottomWardrobeElementFactory.createElements(createdWardrobe, 18f)
                             .map { elementRepository.save(it) }
                     val numberOfShelves = elements.filter { it.name == "Półka" }.size
                     elements.filter { it.name == "Bok" }.forEach {

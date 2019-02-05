@@ -7,7 +7,7 @@ sealed class ElementFactory {
     abstract fun createElements(wardrobe: Wardrobe, elementHeight: Float): List<Element>
 }
 
-object HangingWardrobeElementFactory : ElementFactory() {
+object TopWardrobeElementFactory : ElementFactory() {
 
     override fun createElements(wardrobe: Wardrobe, elementHeight: Float): List<Element> =
             mutableListOf<Element>().apply {
@@ -25,7 +25,7 @@ object HangingWardrobeElementFactory : ElementFactory() {
     private fun getNumberOfShelves(wardrobeHeight: Float): Int = (wardrobeHeight / 300).roundToInt()
 }
 
-object StandingWardrobeElementFactory : ElementFactory() {
+object BottomWardrobeElementFactory : ElementFactory() {
 
     override fun createElements(wardrobe: Wardrobe, elementHeight: Float): List<Element> =
             mutableListOf<Element>().apply {
@@ -37,7 +37,7 @@ object StandingWardrobeElementFactory : ElementFactory() {
 
     private fun createSupportingBar(wardrobeWidth: Float, elementHeight: Float, wardrobe: Wardrobe): Element = Element(name = "Listwa wspierająca", width = 136F, length = wardrobeWidth - (2 * elementHeight) - 1, height = elementHeight, wardrobe = wardrobe)
 
-    private fun createBottomPanel(wardrobeWidth: Float, wardrobeDepth: Float, elementHeight: Float, wardrobe: Wardrobe): Element = Element(name = "Wieniec dolny", width = wardrobeDepth - 55, length = wardrobeWidth - (2 * elementHeight) - 1, height = elementHeight, wardrobe = wardrobe)
+    private fun createBottomPanel(wardrobeWidth: Float, wardrobeDepth: Float, elementHeight: Float, wardrobe: Wardrobe): Element = Element(name = "Wieniec", width = wardrobeDepth - 55, length = wardrobeWidth - (2 * elementHeight) - 1, height = elementHeight, wardrobe = wardrobe)
 
     private fun createSide(wardrobeHeight: Float, wardrobeDepth: Float, elementHeight: Float, wardrobe: Wardrobe): Element = Element(name = "Bok", width = wardrobeDepth, length = wardrobeHeight, height = elementHeight, wardrobe = wardrobe)
 
