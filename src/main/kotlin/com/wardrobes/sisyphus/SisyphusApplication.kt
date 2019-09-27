@@ -10,14 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.stereotype.Component
 
-
 @SpringBootApplication
-class SisyphusApplication
+open class SisyphusApplication
 
 fun main(args: Array<String>) {
     runApplication<SisyphusApplication>(*args)
 }
-
 
 @Component
 class DataLoader @Autowired constructor(

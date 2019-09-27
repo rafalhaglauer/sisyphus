@@ -56,6 +56,6 @@ class AttachmentController(
     fun getModel(@PathVariable("wardrobeId") wardrobeId: Long): InputStreamResource {
 //        val path = wardrobeRepository.findById(wardrobeId).get().model3dUrl
         val path = "wardrobe.obj"
-        return InputStreamResource(FileInputStream(File("$path")))
+        return InputStreamResource(FileInputStream(File(path)))
     }
 }
