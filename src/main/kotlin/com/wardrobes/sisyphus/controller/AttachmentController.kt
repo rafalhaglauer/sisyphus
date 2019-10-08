@@ -1,5 +1,6 @@
 package com.wardrobes.sisyphus.controller
 
+import com.wardrobes.sisyphus.gallery.GoogleDrivePhotoProvider
 import com.wardrobes.sisyphus.model.Attachment
 import com.wardrobes.sisyphus.model.AttachmentRepository
 import com.wardrobes.sisyphus.model.WardrobeRepository
@@ -39,7 +40,7 @@ class AttachmentController(
 
     @GetMapping("/gallery/{wardrobeId}")
     fun getPhotoUrls(@PathVariable("wardrobeId") wardrobeId: Long): List<String> {
-        return attachmentRepository.findAll().filter { it.wardrobe.id == wardrobeId }.map { it.url }
+        return GoogleDrivePhotoProvider().getPhotos()
     }
 
     @PostMapping("/model/{wardrobeId}")
