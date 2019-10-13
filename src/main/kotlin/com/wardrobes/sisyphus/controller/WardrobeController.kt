@@ -1,6 +1,5 @@
 package com.wardrobes.sisyphus.controller
 
-import com.wardrobes.sisyphus.domain.pattern.WardrobePattern
 import com.wardrobes.sisyphus.model.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.web.bind.annotation.*
@@ -29,9 +28,6 @@ class WardrobeController(
             wardrobeRepository.save(createWardrobe(request.wardrobeWidth, request.wardrobeHeight, request.wardrobeDepth))
         }
     }
-
-    @PostMapping("/pattern")
-    fun getAllPatterns(): List<WardrobePattern> = wardrobePatternRepository.findAll().toList()
 
     @PutMapping("/{id}")
     fun update(@PathVariable id: Long, @RequestBody wardrobe: Wardrobe) {
