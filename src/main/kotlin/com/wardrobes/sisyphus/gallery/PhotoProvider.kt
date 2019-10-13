@@ -32,23 +32,23 @@ class GoogleDrivePhotoProvider : PhotoProvider {
         val clientSecrets = GoogleClientSecrets.load(jsonFactory, InputStreamReader(credentials))
         val receiver = LocalServerReceiver.Builder().setPort(8888).build()
         val flow = GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, jsonFactory, clientSecrets, scopes)
-                .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .build()
+            .setDataStoreFactory(FileDataStoreFactory(File(TOKENS_DIRECTORY_PATH)))
+            .setAccessType("offline")
+            .build()
         return AuthorizationCodeInstalledApp(flow, receiver).authorize("user")
     }
 
     override fun getPhotos(): List<String> {
         return GoogleNetHttpTransport.newTrustedTransport().let { Drive.Builder(it, jsonFactory, getCredentials(it)) }
-                .setApplicationName(APPLICATION_NAME)
-                .build()
-                .files()
-                .list()
-                .setQ(" '1l5ttXXGmmcxhIwPuqdDMoJy4b7j3socl' in parents")
-                .setFields("files(id)")
-                .execute()
-                .files
-                ?.map { "https://drive.google.com/uc?export=download&id=${it.id}" }
-                ?: emptyList()
+            .setApplicationName(APPLICATION_NAME)
+            .build()
+            .files()
+            .list()
+            .setQ(" '1l5ttXXGmmcxhIwPuqdDMoJy4b7j3socl' in parents")
+            .setFields("files(id)")
+            .execute()
+            .files
+            ?.map { "https://drive.google.com/uc?export=download&id=${it.id}" }
+            ?: emptyList()
     }
 }

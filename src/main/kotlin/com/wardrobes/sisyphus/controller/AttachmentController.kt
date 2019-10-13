@@ -17,8 +17,8 @@ import java.nio.file.Paths
 
 @RestController
 class AttachmentController(
-        val wardrobeRepository: WardrobeRepository,
-        val attachmentRepository: AttachmentRepository
+    val wardrobeRepository: WardrobeRepository,
+    val attachmentRepository: AttachmentRepository
 ) {
 
     @PostMapping("/gallery/{wardrobeId}/upload")
@@ -48,7 +48,8 @@ class AttachmentController(
     fun uploadModel(@RequestPart("file") file: MultipartFile, @PathVariable("wardrobeId") wardrobeId: Long) {
         if (!Files.exists(Paths.get(wardrobeId.toString()))) Files.createDirectory(Paths.get(wardrobeId.toString()))
         Files.write(Paths.get("$wardrobeId/${file.originalFilename}"), file.bytes)
-        wardrobeRepository.findById(wardrobeId).get().model3dUrl = "$wardrobeId/${file.originalFilename}"
+//        wardrobeRepository.findById(wardrobeId).get().model3dUrl = "$wardrobeId/${file.originalFilename}"
+//        TODO!
     }
 
     @GetMapping(value = ["/model/{wardrobeId}"], produces = [MediaType.APPLICATION_OCTET_STREAM_VALUE])

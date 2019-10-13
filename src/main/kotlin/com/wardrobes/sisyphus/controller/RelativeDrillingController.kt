@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/drilling/relative")
 class RelativeDrillingController(
-        private val repository: RelativeDrillingRepository,
-        private val relativeDrillingSetRepository: RelativeDrillingSetRepository
+    private val repository: RelativeDrillingRepository,
+    private val relativeDrillingSetRepository: RelativeDrillingSetRepository
 ) {
 
     @GetMapping("/all/{relativeDrillingCompositionId}")
     fun getAll(@PathVariable relativeDrillingCompositionId: Long): Collection<RelativeDrilling> =
-            repository.findAll()
-                    .filter { it.relativeDrillingSet.id == relativeDrillingCompositionId }
-                    .toList()
+        repository.findAll()
+            .filter { it.relativeDrillingSet.id == relativeDrillingCompositionId }
+            .toList()
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long): RelativeDrilling = repository.findById(id).get()

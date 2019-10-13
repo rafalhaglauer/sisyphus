@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/composition")
 class CompositionController(
-        private val repositorySet: ElementDrillingSetCompositionRepository,
-        private val elementRepository: ElementRepository,
-        private val relativeDrillingSetRepository: RelativeDrillingSetRepository
+    private val repositorySet: ElementDrillingSetCompositionRepository,
+    private val elementRepository: ElementRepository,
+    private val relativeDrillingSetRepository: RelativeDrillingSetRepository
 ) {
 
     @GetMapping("/all/{elementId}")
     fun getAll(@PathVariable elementId: Long): Collection<ElementDrillingSetComposition> {
         return repositorySet
-                .findAll()
-                .filter { it.element.id == elementId }
+            .findAll()
+            .filter { it.element.id == elementId }
     }
 
     @GetMapping("/{compositionId}")
@@ -42,18 +42,18 @@ class CompositionController(
             val element = elementRepository.findById(elementId).get()
             val drillingSet = relativeDrillingSetRepository.findById(drillingSetId).get()
             ElementDrillingSetComposition(
-                    element = element,
-                    drillingSet = drillingSet,
-                    xOffset = xOffset,
-                    yOffset = yOffset
+                element = element,
+                drillingSet = drillingSet,
+                xOffset = xOffset,
+                yOffset = yOffset
             ).also { repositorySet.save(it) }
         }
     }
 }
 
 class ElementDrillingSetCompositionRequest(
-        val elementId: Long,
-        val drillingSetId: Long,
-        val xOffset: Offset,
-        val yOffset: Offset
+    val elementId: Long,
+    val drillingSetId: Long,
+    val xOffset: Offset,
+    val yOffset: Offset
 )
