@@ -21,4 +21,15 @@ class WardrobePatternController(
         wardrobePatternRepository.save(wardrobe)
     }
 
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody wardrobe: WardrobePattern) {
+        wardrobePatternRepository.save(get(id).apply {
+            symbol = wardrobe.symbol
+            description = wardrobe.description
+        })
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long) = wardrobePatternRepository.deleteById(id)
+
 }
