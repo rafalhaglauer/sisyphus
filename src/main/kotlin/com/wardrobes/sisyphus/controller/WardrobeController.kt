@@ -19,8 +19,8 @@ class WardrobeController(
     fun get(@PathVariable id: Long) = wardrobeRepository.findById(id).get()
 
     @PostMapping("/{patternId}")
-    fun create(@RequestBody wardrobe: Wardrobe, @PathVariable patternId: String) {
-        if (patternId.isBlank()) {
+    fun create(@RequestBody wardrobe: Wardrobe, @PathVariable patternId: Long) {
+        if (patternId == 0L) {
             wardrobeRepository.save(wardrobe)
         } else {
             wardrobePatternRepository.findByIdOrNull(patternId)?.run {
