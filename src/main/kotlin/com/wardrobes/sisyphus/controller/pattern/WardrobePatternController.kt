@@ -1,4 +1,4 @@
-package com.wardrobes.sisyphus.controller
+package com.wardrobes.sisyphus.controller.pattern
 
 import com.wardrobes.sisyphus.domain.pattern.WardrobePattern
 import com.wardrobes.sisyphus.model.WardrobePatternRepository

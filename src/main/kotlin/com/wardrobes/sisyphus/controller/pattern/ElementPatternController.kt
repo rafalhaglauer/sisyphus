@@ -1,7 +1,6 @@
-package com.wardrobes.sisyphus.controller
+package com.wardrobes.sisyphus.controller.pattern
 
 import com.wardrobes.sisyphus.domain.pattern.ElementPattern
-import com.wardrobes.sisyphus.domain.pattern.WardrobePattern
 import com.wardrobes.sisyphus.model.ElementPatternRepository
 import com.wardrobes.sisyphus.model.WardrobePatternRepository
 import org.springframework.web.bind.annotation.*
@@ -14,7 +13,7 @@ class ElementPatternController(
 ) {
 
     @GetMapping("/wardrobe/{wardrobeId}/elements")
-    fun getAll(@PathVariable wardrobeId: Long): List<ElementPattern> = elementPatternRepository.findAll().toList().filter {
+    fun getAll(@PathVariable wardrobeId: Long): List<ElementPattern> = elementPatternRepository.findAll().filter {
         it.wardrobe.id == wardrobeId
     }
 
