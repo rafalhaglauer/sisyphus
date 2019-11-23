@@ -1,17 +1,9 @@
 package com.wardrobes.sisyphus.model
 
+import com.wardrobes.sisyphus.domain.wardrobe.Wardrobe
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import javax.persistence.*
-
-@Entity
-data class Wardrobe(
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long = 0,
-    var symbol: String = "",
-    var width: Int = 0,
-    var height: Int = 0,
-    var depth: Int = 0
-)
 
 @Entity
 data class Attachment(

@@ -1,6 +1,6 @@
 package com.wardrobes.sisyphus.domain.pattern
 
-import com.wardrobes.sisyphus.model.Wardrobe
+import com.wardrobes.sisyphus.domain.wardrobe.Wardrobe
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

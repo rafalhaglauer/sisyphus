@@ -1,7 +1,7 @@
 package com.wardrobes.sisyphus.domain.pattern
 
+import com.wardrobes.sisyphus.domain.wardrobe.Wardrobe
 import com.wardrobes.sisyphus.model.Element
-import com.wardrobes.sisyphus.model.Wardrobe
 import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 import javax.persistence.*

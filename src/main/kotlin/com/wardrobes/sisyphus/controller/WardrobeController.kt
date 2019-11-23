@@ -1,5 +1,6 @@
 package com.wardrobes.sisyphus.controller
 
+import com.wardrobes.sisyphus.domain.wardrobe.Wardrobe
 import com.wardrobes.sisyphus.model.*
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.web.bind.annotation.*
@@ -17,15 +18,14 @@ class WardrobeController(
     @GetMapping("/{id}")
     fun get(@PathVariable id: Long) = wardrobeRepository.findById(id).get()
 
-    @PostMapping
-    fun create(@RequestBody wardrobe: Wardrobe) {
-        wardrobeRepository.save(wardrobe)
-    }
-
-    @PostMapping("/fromPattern")
-    fun create(@RequestBody request: CreateWardrobeFromPatternRequest) {
-        wardrobePatternRepository.findByIdOrNull(request.wardrobePatternId)?.run {
-            wardrobeRepository.save(createWardrobe(request.wardrobeWidth, request.wardrobeHeight, request.wardrobeDepth))
+    @PostMapping("/{patternId}")
+    fun create(@RequestBody wardrobe: Wardrobe, @PathVariable patternId: String) {
+        if (patternId.isBlank()) {
+            wardrobeRepository.save(wardrobe)
+        } else {
+            wardrobePatternRepository.findByIdOrNull(patternId)?.run {
+                wardrobeRepository.save(createWardrobe(wardrobe.width, wardrobe.height, wardrobe.depth))
+            }
         }
     }
 
@@ -45,10 +45,3 @@ class WardrobeController(
     }
 
 }
-
-class CreateWardrobeFromPatternRequest(
-    val wardrobePatternId: Long,
-    val wardrobeWidth: Int,
-    val wardrobeHeight: Int,
-    val wardrobeDepth: Int
-)

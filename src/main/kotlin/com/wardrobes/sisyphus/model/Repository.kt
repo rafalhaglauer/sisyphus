@@ -3,6 +3,7 @@ package com.wardrobes.sisyphus.model
 import com.wardrobes.sisyphus.domain.pattern.DrillingPattern
 import com.wardrobes.sisyphus.domain.pattern.ElementPattern
 import com.wardrobes.sisyphus.domain.pattern.WardrobePattern
+import com.wardrobes.sisyphus.domain.wardrobe.Wardrobe
 import org.springframework.data.repository.CrudRepository
 
 interface WardrobeRepository : CrudRepository<Wardrobe, Long>
